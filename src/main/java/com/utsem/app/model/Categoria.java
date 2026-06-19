@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Categoria {
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
