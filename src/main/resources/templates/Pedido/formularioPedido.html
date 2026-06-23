@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Productos</title>
+    <div th:replace="~{fragmentos :: bootstrap}"></div>
+</head>
+
+<body>
+    <div th:replace="~{fragmentos :: menu}"></div>
+    
+    <h1>Pedidos</h1>
+	
+	<form th:object="${pedido}"
+	              th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}"
+	              method="post">
+
+	            <input type="hidden" th:field="*{uuid}">
+
+	            <div class="mb-3">
+	                <label class="form-label">Cliente</label>
+	                <select class="form-control" th:field="*{id}">
+	                    <option value="">Seleccione un cliente</option>
+	                    <option th:each="cliente : ${clientes}"
+	                            th:value="${cliente.id}"
+	                            th:text="${cliente.nombre}">
+	                    </option>
+	                </select>
+	            </div>
+
+	            <div class="mb-3">
+	                <label class="form-label">Estatus</label>
+	                <select class="form-control" th:field="*{estatus}">
+	                    <option th:each="estado : ${estados}"
+	                            th:value="${estado}"
+	                            th:text="${estado}">
+	                    </option>
+	                </select>
+	            </div>
+
+	            <hr>
+
+	            <h4>Detalle del pedido</h4>
+
+	            <div class="mb-3">
+	                <label class="form-label">Producto</label>
+	                <select class="form-control" th:field="*{idProducto}">
+	                    <option value="">Seleccione un producto</option>
+	                    <option th:each="producto : ${productos}"
+	                            th:value="${producto.id}"
+	                            th:text="${producto.descripcion}">
+	                    </option>
+	                </select>
+	            </div>
+
+	            <div class="mb-3">
+	                <label class="form-label">Cantidad</label>
+	                <input type="number" class="form-control" th:field="*{cantidad}" min="1">
+	            </div>
+
+	            <div class="mb-3">
+	                <label class="form-label">Topping</label>
+	                <input type="text" class="form-control" th:field="*{topping}">
+	            </div>
+
+	            <button type="submit" class="btn btn-success">Guardar pedido</button>
+
+	            <a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">Cancelar</a>
+
+	        </form>
+
+	    </div>
+
+	
+
+</body>
+
+</html>
