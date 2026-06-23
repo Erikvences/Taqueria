@@ -15,11 +15,7 @@
 	<div th:replace="~{fragmentos :: menu}"></div>
 
 	<div class="container mt-4">
-		<!-- Toast message / Alert info -->
-		<div th:if="${mensaje}" class="alert alert-info alert-dismissible fade show" role="alert">
-			<span th:text="${mensaje}">Mensaje informativo</span>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
+		<!-- mensajes removidos: no mostrar banner superior -->
 
 		<!-- Header -->
 		<div class="d-flex justify-content-between align-items-center mb-4">

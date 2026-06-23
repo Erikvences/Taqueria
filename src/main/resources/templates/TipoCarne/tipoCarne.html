@@ -15,11 +15,7 @@
 	<div th:replace="~{fragmentos :: menu}"></div>
 
 	<div class="container mt-4">
-		<!-- Toast message / Alert info -->
-		<div th:if="${mensaje}" class="alert alert-info alert-dismissible fade show" role="alert">
-			<span th:text="${mensaje}">Mensaje informativo</span>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
+		<!-- mensajes removidos: no mostrar banner superior -->
 
 		<!-- Header -->
 		<div class="d-flex justify-content-between align-items-center mb-4">
@@ -27,7 +23,7 @@
 				<h1 class="h2 text-dark font-weight-bold">Catálogo de Tipos de Carne</h1>
 				<p class="text-muted">Listado y administración de tipos de carne</p>
 			</div>
-			<a th:href="@{/rutaTipoCarne/nuevo}" class="btn btn-primary">
+			<a th:href="@{/TipoCarne/nuevo}" class="btn btn-primary">
 				<i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Carne
 			</a>
 		</div>
@@ -47,10 +43,10 @@
 							<tr th:each="tc : ${tiposCarne}">
 								<td class="px-4 fw-medium" th:text="${tc.nombre}">Res</td>
 								<td class="text-end px-4">
-									<a th:href="@{/rutaTipoCarne/editar/{uuid}(uuid=${tc.uuid})}" class="btn btn-sm btn-outline-primary me-1">
+									<a th:href="@{/TipoCarne/editar/{uuid}(uuid=${tc.uuid})}" class="btn btn-sm btn-outline-primary me-1">
 										<i class="bi bi-pencil-square"></i> Editar
 									</a>
-									<a th:href="@{/rutaTipoCarne/eliminar/{uuid}(uuid=${tc.uuid})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este tipo de carne?');">
+									<a th:href="@{/TipoCarne/eliminar/{uuid}(uuid=${tc.uuid})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este tipo de carne?');">
 										<i class="bi bi-trash"></i> Eliminar
 									</a>
 								</td>
