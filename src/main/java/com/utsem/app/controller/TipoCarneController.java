@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequestMapping("rutaTipoCarne")
+@RequestMapping("TipoCarne")
 public class TipoCarneController {
 
 	@Autowired
@@ -45,7 +45,7 @@ public class TipoCarneController {
 			return "TipoCarne/editarTipoCarne";
 		}
 		tipoCarneService.guardar(tcDto);
-		return "redirect:/rutaTipoCarne/listar";
+		return "redirect:/TipoCarne/listar";
 	}
 
 	@PostMapping("actualizar")
@@ -55,7 +55,7 @@ public class TipoCarneController {
 			return "TipoCarne/editarTipoCarne";
 		}
 		tipoCarneService.actualiza(tcDto);
-		return "redirect:/rutaTipoCarne/listar";
+		return "redirect:/TipoCarne/listar";
 	}
 
 	@GetMapping("editar/{uuid}")
@@ -67,6 +67,6 @@ public class TipoCarneController {
 	@GetMapping("eliminar/{uuid}")
 	public String metodoElimina(@PathVariable UUID uuid) {
 		tipoCarneService.borrar(uuid);
-		return "redirect:/rutaTipoCarne/listar";
+		return "redirect:/TipoCarne/listar";
 	}
 }
