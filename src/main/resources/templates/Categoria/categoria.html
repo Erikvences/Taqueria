@@ -23,8 +23,8 @@
 					<td th:text="${categoria.nombreCategoria}"></td>
 					<td th:text="${categoria.descripcion}"></td>
 					<td>
-						<a th:href="@{'/Categoria/editar/' + ${categoria.id}}" class="btn btn-warning">✏️ Editar</a>
-						<a th:href="@{'/Categoria/eliminar/' + ${categoria.id}}" class="btn btn-danger" onclick=" return confirm('¿Estás seguro?')">🗑️ Eliminar</a>
+						<a th:href="@{'/Categoria/editar/' + ${categoria.uuid}}" class="btn btn-warning">✏️ Editar</a>
+						<a th:href="@{'/Categoria/eliminar/' + ${categoria.uuid}}" class="btn btn-danger" onclick=" return confirm('¿Estás seguro?')">🗑️ Eliminar</a>
 					</td>
 				</tr>
 			</tbody>

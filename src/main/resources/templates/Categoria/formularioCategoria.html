@@ -8,9 +8,9 @@
 
 <body>
 	<div th:replace="~{fragmentos :: menu}"></div>
-	<h1 th:text ="${id} != null ? 'Editar Categoria' : 'Nueva Categoria'" class="mb-4"></h1>
-	<form th:action="${id} == null ? @{/Categoria/guardar} : @{/Categoria/actualizar}" method="post" th:object="${Categoria}">
-		<input type="hidden" name="id" th:field="${id}" />
+	<h1 th:text="${Categoria.uuid} != null ? 'Editar Categoria' : 'Nueva Categoria'"></h1>
+	<form th:action="${Categoria.uuid} == null ? @{/Categoria/guardar} : @{/Categoria/actualizar}" method="post" th:object="${Categoria}">
+		<input type="hidden" name="uuid" th:field="${Categoria.uuid}" />
 
 		<div class="mb-3">
 			<label class="form-label">Nombre:</label>
@@ -23,10 +23,6 @@
             <textarea class="form-control" th:field="*{descripcion}"></textarea>
             <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}"
                                  th:errors="*{descripcion}">Error</div>
-
-		
-
-
 		<button type="submit" class="btn btn-success">Guardar</button>
 		<a th:href="@{/Categoria/listar}" class="btn btn-secondary">Cancelar</a>
 	</form>
