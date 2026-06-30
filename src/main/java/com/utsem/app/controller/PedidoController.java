@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.utsem.app.dto.PedidoDTO;
 import com.utsem.app.enums.Estatus;
+import com.utsem.app.service.ClienteService;
 import com.utsem.app.service.PedidoService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("rutaPedidos")

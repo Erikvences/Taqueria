@@ -2,76 +2,89 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Productos</title>
-    <div th:replace="~{fragmentos :: bootstrap}"></div>
+	<title>Productos</title>
+	<div th:replace="~{fragmentos :: bootstrap}"></div>
 </head>
 
 <body>
-    <div th:replace="~{fragmentos :: menu}"></div>
-    
-    <h1>Pedidos</h1>
-	
+	<div th:replace="~{fragmentos :: menu}"></div>
+
+	<h1>Pedidos</h1>
+
 	<form th:object="${pedido}"
-	              th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}"
-	              method="post">
+		th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}" method="post">
 
-	            <input type="hidden" th:field="*{uuid}">
+		<input type="hidden" th:field="*{uuid}">
 
-	            <div class="mb-3">
-	                <label class="form-label">Cliente</label>
-	                <select class="form-control" th:field="*{id}">
-	                    <option value="">Seleccione un cliente</option>
-	                    <option th:each="cliente : ${clientes}"
-	                            th:value="${cliente.id}"
-	                            th:text="${cliente.nombre}">
-	                    </option>
-	                </select>
-	            </div>
+		<div class="mb-3">
+			<label class="form-label">Cliente</label>
 
-	            <div class="mb-3">
-	                <label class="form-label">Estatus</label>
-	                <select class="form-control" th:field="*{estatus}">
-	                    <option th:each="estado : ${estados}"
-	                            th:value="${estado}"
-	                            th:text="${estado}">
-	                    </option>
-	                </select>
-	            </div>
+			<select class="form-control" th:field="*{idCliente}">
+				<option value="">Seleccione un cliente</option>
 
-	            <hr>
+				<option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}">
+				</option>
+			</select>
 
-	            <h4>Detalle del pedido</h4>
+			<div class="text-danger" th:if="${#fields.hasErrors('idCliente')}" th:errors="*{idCliente}">
+			</div>
+		</div>
 
-	            <div class="mb-3">
-	                <label class="form-label">Producto</label>
-	                <select class="form-control" th:field="*{idProducto}">
-	                    <option value="">Seleccione un producto</option>
-	                    <option th:each="producto : ${productos}"
-	                            th:value="${producto.id}"
-	                            th:text="${producto.descripcion}">
-	                    </option>
-	                </select>
-	            </div>
+		<div class="mb-3">
+			<label class="form-label">Estatus</label>
 
-	            <div class="mb-3">
-	                <label class="form-label">Cantidad</label>
-	                <input type="number" class="form-control" th:field="*{cantidad}" min="1">
-	            </div>
+			<select class="form-control" th:field="*{estatus}">
+				<option value="">Seleccione un estatus</option>
 
-	            <div class="mb-3">
-	                <label class="form-label">Topping</label>
-	                <input type="text" class="form-control" th:field="*{topping}">
-	            </div>
+				<option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}">
+				</option>
+			</select>
+		</div>
 
-	            <button type="submit" class="btn btn-success">Guardar pedido</button>
+		<hr>
 
-	            <a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">Cancelar</a>
+		<h4>Detalle del pedido</h4>
 
-	        </form>
+		<div class="mb-3">
+			<label class="form-label">Producto</label>
 
-	    </div>
+			<select class="form-control" th:field="*{idProducto}">
+				<option value="">Seleccione un producto</option>
 
-	
+				<option th:each="producto : ${productos}" th:value="${producto.id}" th:text="${producto.descripcion}">
+				</option>
+			</select>
+
+			<div class="text-danger" th:if="${#fields.hasErrors('idProducto')}" th:errors="*{idProducto}">
+			</div>
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label">Cantidad</label>
+
+			<input type="number" class="form-control" th:field="*{cantidad}" min="1">
+
+			<div class="text-danger" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}">
+			</div>
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label">Topping</label>
+
+			<input type="text" class="form-control" th:field="*{topping}">
+		</div>
+
+		<button type="submit" class="btn btn-success">
+			Guardar pedido
+		</button>
+
+		<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">
+			Cancelar
+		</a>
+
+	</form>
+
+	</div>
 
 </body>
 

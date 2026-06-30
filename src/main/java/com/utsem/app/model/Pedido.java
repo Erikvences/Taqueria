@@ -33,7 +33,11 @@ public class Pedido {
 	@Column
 	private String gustaLuisAngelOS;
 	@ManyToOne
-	private String cliente;
+	private String Producto;
+	@ManyToOne
+	private Long idCliente;
+	
+	private Long 
 	
 	public Long getId() {
 		return id;
@@ -59,12 +63,6 @@ public class Pedido {
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
-	public String getCliente() {
-		return cliente;
-	}
-	public void setCliente(String cliente) {
-		this.cliente = cliente;
-	}
 	public String getGustaDaffneeAraniV() {
 		return gustaDaffneeAraniV;
 	}
@@ -88,6 +86,18 @@ public class Pedido {
 	}
 	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
 		this.gustaLuisAngelOS = gustaLuisAngelOS;
+	}
+	public String getProducto() {
+		return Producto;
+	}
+	public void setProducto(String producto) {
+		Producto = producto;
+	}
+	public Long getIdCliente() {
+		return idCliente;
+	}
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 	
 	

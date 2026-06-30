@@ -1,6 +1,7 @@
 package com.utsem.app.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import com.utsem.app.dto.PedidoDTO;
+import com.utsem.app.model.Cliente;
 import com.utsem.app.model.Pedido;
+import com.utsem.app.repo.ClienteRepo;
 import com.utsem.app.repo.PedidoRepo;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -59,6 +62,38 @@ public class PedidoService {
 
 		} else {
 			throw new EntityNotFoundException("Pedido no encontrado con el UUID: " + ped.getUuid());
+		}
+	}
+
+	public PedidoDTO obtenerPedidoUUID(UUID uuid) {
+
+		Optional<Pedido> optPedido = pedidoRepo.findByUuid(uuid);
+
+		if (optPedido.isPresent()) {
+
+			Pedido pedido = optPedido.get();
+
+			PedidoDTO dto = mapper.map(pedido, PedidoDTO.class);
+
+			if (pedido.getCliente() != null) {
+				dto.setIdCliente(pedido.getCliente().getIdCliente());
+			}
+
+			return dto;
+
+		} else {
+			throw new EntityNotFoundException("Pedido no encontrado con el UUID: " + uuid);
+		}
+	}
+
+	public void borrar(UUID uuid) {
+
+		Optional<Pedido> optPedido = pedidoRepo.findByUuid(uuid);
+
+		if (optPedido.isPresent()) {
+			pedidoRepo.delete(optPedido.get());
+		} else {
+			throw new EntityNotFoundException("Pedido no encontrado con el UUID: " + uuid);
 		}
 	}
 }

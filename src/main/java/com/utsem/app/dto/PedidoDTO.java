@@ -13,6 +13,8 @@ public class PedidoDTO {
 	private String gustaErikVD;
 	private String gustaFernandoDavidSM;
 	private String gustaLuisAngelOS;
+	private Long idCliente;
+	private String producto;
 	
 	public Estatus getEstatus() {
 		return estatus;
@@ -56,6 +58,19 @@ public class PedidoDTO {
 	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
 		this.gustaLuisAngelOS = gustaLuisAngelOS;
 	}
+	public Long getIdCliente() {
+		return idCliente;
+	}
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+	public String getProducto() {
+		return producto;
+	}
+	public void setProducto(String producto) {
+		this.producto = producto;
+	}
+	
 	
 	
 }

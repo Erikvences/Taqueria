@@ -1,16 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-	<title>Tipo Carne</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Catálogo de Tipos de Carne</title>
+	<!-- Fragmento Bootstrap -->
 	<div th:replace="~{fragmentos :: bootstrap}"></div>
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
+<body class="bg-light">
 
-<body>
+	<!-- Navbar Global desde Fragmento -->
 	<div th:replace="~{fragmentos :: menu}"></div>
-	
-    <h1>Tipo Carne</h1>
+
+	<div class="container mt-4">
+		<!-- mensajes removidos: no mostrar banner superior -->
+
+		<!-- Header -->
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<div>
+				<h1 class="h2 text-dark font-weight-bold">Catálogo de Tipos de Carne</h1>
+				<p class="text-muted">Listado y administración de tipos de carne</p>
+			</div>
+			<a th:href="@{/TipoCarne/nuevo}" class="btn btn-primary">
+				<i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Carne
+			</a>
+		</div>
+
+		<!-- Table Card -->
+		<div class="card shadow-sm border-0">
+			<div class="card-body p-0">
+				<div class="table-responsive">
+					<table class="table table-striped table-hover align-middle mb-0" th:if="${not #lists.isEmpty(tiposCarne)}">
+						<thead class="table-dark">
+							<tr>
+								<th class="px-4">Nombre</th>
+								<th class="text-end px-4">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="tc : ${tiposCarne}">
+								<td class="px-4 fw-medium" th:text="${tc.nombre}">Res</td>
+								<td class="text-end px-4">
+									<a th:href="@{/TipoCarne/editar/{uuid}(uuid=${tc.uuid})}" class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil-square"></i> Editar
+									</a>
+									<a th:href="@{/TipoCarne/eliminar/{uuid}(uuid=${tc.uuid})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este tipo de carne?');">
+										<i class="bi bi-trash"></i> Eliminar
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<!-- Empty State -->
+					<div th:if="${#lists.isEmpty(tiposCarne)}" class="text-center py-5">
+						<i class="bi bi-tags text-muted" style="font-size: 3rem;"></i>
+						<h3 class="h5 mt-3 text-dark">No hay tipos de carne registrados</h3>
+						<p class="text-muted">Comienza agregando un tipo nuevo usando el botón de arriba.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
-
 </html>
