@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Reporte de productos más vendidos</title>
+
+	<div th:replace="~{fragmentos :: bootstrap}"></div>
+</head>
+
+<body>
+
+	<div th:replace="~{fragmentos :: menu}"></div>
+
+	<div class="container mt-4">
+
+		<div class="card">
+
+			<div class="card-header bg-dark text-white">
+				<h3>Reporte de productos más vendidos</h3>
+			</div>
+
+			<div class="card-body">
+
+				<table class="table table-striped table-hover">
+					<thead class="table-dark">
+						<tr>
+							<th>Producto</th>
+							<th>Cantidad vendida</th>
+							<th>Ingreso generado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="fila : ${productos}">
+							<td th:text="${fila[0]}"></td>
+							<td th:text="${fila[1]}"></td>
+							<td th:text="'$ ' + ${fila[2]}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(productos)}">
+							<td colspan="3" class="text-center">No hay datos de productos vendidos.</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary mt-3">Volver a pedidos</a>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>

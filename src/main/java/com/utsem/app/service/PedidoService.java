@@ -1,6 +1,7 @@
 package com.utsem.app.service;
 
 import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 import org.modelmapper.ModelMapper;
@@ -98,5 +99,13 @@ public class PedidoService {
 		detallePedidoRepo.deleteByPedido(pedido);
 
 		pedidoRepo.delete(pedido);
+	}
+
+	public List<Object[]> obtenerVentasPorFecha(LocalDate desde, LocalDate hasta) {
+		return pedidoRepo.ventasPorFecha(desde, hasta);
+	}
+
+	public List<Object[]> obtenerProductosMasVendidos(int top) {
+		return detallePedidoRepo.productosMasVendidos().stream().limit(top).toList();
 	}
 }

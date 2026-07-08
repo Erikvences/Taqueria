@@ -1,5 +1,6 @@
 package com.utsem.app.model;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import com.utsem.app.enums.Estatus;
@@ -22,6 +23,8 @@ public class Pedido {
 	@Column
 	private Float total;
 	@Column
+	private LocalDate fecha;
+	@Column
 	private Estatus estatus;
 	@Column(unique = true)
 	private UUID uuid;
@@ -31,6 +34,9 @@ public class Pedido {
 	@PrePersist
 	private void inicializarUuid() {
 		this.uuid = UUID.randomUUID();
+		if (this.fecha == null) {
+			this.fecha = LocalDate.now();
+		}
 	}
 	
 	public Long getId() {
@@ -44,6 +50,12 @@ public class Pedido {
 	}
 	public void setTotal(Float total) {
 		this.total = total;
+	}
+	public LocalDate getFecha() {
+		return fecha;
+	}
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
 	}
 	public Estatus getEstatus() {
 		return estatus;

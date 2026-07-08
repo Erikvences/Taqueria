@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Reporte de ventas por fecha</title>
+
+	<div th:replace="~{fragmentos :: bootstrap}"></div>
+</head>
+
+<body>
+
+	<div th:replace="~{fragmentos :: menu}"></div>
+
+	<div class="container mt-4">
+
+		<div class="card">
+
+			<div class="card-header bg-dark text-white">
+				<h3>Reporte de ventas por fecha</h3>
+			</div>
+
+			<div class="card-body">
+
+				<form class="row g-3 mb-4" th:action="@{/rutaPedidos/reporte/ventas-por-fecha}" method="get">
+					<div class="col-md-4">
+						<label class="form-label">Fecha desde</label>
+						<input type="date" name="desde" class="form-control" th:value="${desde}">
+					</div>
+					<div class="col-md-4">
+						<label class="form-label">Fecha hasta</label>
+						<input type="date" name="hasta" class="form-control" th:value="${hasta}">
+					</div>
+					<div class="col-md-4 d-flex align-items-end gap-2">
+						<button type="submit" class="btn btn-primary">Filtrar</button>
+						<a th:href="@{/rutaPedidos/reporte/ventas-por-fecha}" class="btn btn-secondary">Limpiar</a>
+					</div>
+				</form>
+
+				<table class="table table-striped table-hover">
+					<thead class="table-dark">
+						<tr>
+							<th>Fecha</th>
+							<th>Número de ventas</th>
+							<th>Total vendido</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="fila : ${ventas}">
+							<td th:text="${fila[0]}"></td>
+							<td th:text="${fila[1]}"></td>
+							<td th:text="'$ ' + ${fila[2]}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(ventas)}">
+							<td colspan="3" class="text-center">No hay ventas para el rango seleccionado.</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="mt-4">
+					<p><strong>Total de ventas realizadas:</strong> <span th:text="${totalVentas}"></span></p>
+					<p><strong>Total de ingresos:</strong> <span th:text="'$ ' + ${totalIngresos}"></span></p>
+					<p><strong>Promedio de venta por día:</strong> <span th:text="'$ ' + ${promedioPorDia}"></span></p>
+				</div>
+
+				<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary mt-3">Volver a pedidos</a>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>
