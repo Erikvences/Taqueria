@@ -86,6 +86,9 @@ public class DetallePedidoService {
 			detalle.setPedido(pedido);
 			detalle.setProducto(producto);
 			detalle.setCantidad(dto.getCantidad());
+			if (producto.getPrecio() != null && dto.getCantidad() != null) {
+				detalle.setSubtotal(producto.getPrecio() * dto.getCantidad());
+			}
 			detallePedidoRepo.save(detalle);
 
 			recalcularTotalPedido(pedido);

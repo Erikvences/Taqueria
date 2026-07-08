@@ -38,6 +38,11 @@
 						<label><strong>Total</strong></label>
 						<input class="form-control" th:value="'$ ' + ${pedido.total}" readonly>
 					</div>
+					<div class="col-md-10">
+						<label><strong>Dirección</strong></label>
+						<input class="form-control" th:value="${pedido.cliente.direccion}" readonly>
+					</div>
+
 
 				</div>
 
