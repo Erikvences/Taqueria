@@ -28,7 +28,7 @@ public class CategoriaController {
 	@GetMapping("listar")
 	public String Listar(Model model) {
 		model.addAttribute("Categorias", categoriaService.listar());
-		return "/Categoria/categoria";
+		return "Categoria/categoria";
 	}
 	
 	@GetMapping("Nueva")
@@ -69,9 +69,12 @@ public class CategoriaController {
 	@GetMapping("eliminar/{uuid}")
 	public String metodoElimina(Model model, @PathVariable UUID uuid) {
 
-		
-		categoriaService.borrar2(uuid);
-		return "redirect:/Categoria/listar";
+		try {
+			categoriaService.borrar2(uuid);
+			return "redirect:/Categoria/listar";
+		} catch (IllegalStateException ex) {
+			return "redirect:/Categoria/listar?error=" + java.net.URLEncoder.encode(ex.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
+		}
 	}
 	
 }

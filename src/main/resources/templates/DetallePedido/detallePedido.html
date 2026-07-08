@@ -162,15 +162,35 @@
 
 				</table>
 
-				<a class="btn btn-secondary" th:href="@{/rutaPedidos/listar}">
+				<button type="button" class="btn btn-secondary" onclick="handleGuardar()">
 					Guardar
-				</a>
+				</button>
 
 			</div>
 
 		</div>
 
 	</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	var detallesCount = /*[[${#lists.size(detalles)}]]*/ 0;
+	function handleGuardar(){
+		if(detallesCount == 0){
+			if(confirm('No hay productos en el pedido. Si continúa, el pedido será eliminado. ¿Desea continuar?')){
+				/* delete URL for pedido */
+				var deleteUrl = /*[[ @{/rutaPedidos/eliminar/{uuid}(uuid=${pedido.uuid})} ]]*/ '';
+				window.location.href = deleteUrl;
+			} else {
+				return;
+			}
+		} else {
+			var listUrl = /*[[ @{/rutaPedidos/listar} ]]*/ '';
+			window.location.href = listUrl;
+		}
+	}
+/*]]>*/
+</script>
 
 </body>
 

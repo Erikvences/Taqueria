@@ -55,7 +55,8 @@ public class PedidoController {
 
 		Pedido pedidoGuardado = pedidoService.guardar(pedidoDTO);
 
-		return "redirect:/rutaDetallePedidos/nuevo/" + pedidoGuardado.getUuid();
+		// Redirect to detalle form and indicate this pedido was just created
+		return "redirect:/rutaDetallePedidos/nuevo/" + pedidoGuardado.getUuid() + "?fromNew=true";
 	}
 
 	@GetMapping("editar/{uuid}")

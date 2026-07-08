@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.utsem.app.dto.CategoriaDTO;
 import com.utsem.app.model.Categoria;
 import com.utsem.app.repo.CategoriaRepo;
+import com.utsem.app.repo.ProductoRepo;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,9 @@ public class CategoriaService {
 
 	@Autowired
 	ModelMapper mapper;
+    
+	@Autowired
+	ProductoRepo productoRepo;
 	
 	public List<CategoriaDTO> listar(){
 		return categoriaRepo.findAll().stream()
@@ -58,6 +62,12 @@ public class CategoriaService {
 	
 	@Transactional
 	public void borrar2(UUID uuid) {
+		com.utsem.app.model.Categoria categoria = categoriaRepo.findByUuid(uuid)
+				.orElseThrow(() -> new EntityNotFoundException("Categoría no encontrada con el UUID: " + uuid));
+		long referencias = productoRepo.countByCategoria(categoria);
+		if (referencias > 0) {
+			throw new IllegalStateException("No se puede eliminar la categoría porque está asociada a productos.");
+		}
 		categoriaRepo.deleteByUuid(uuid);
 	}
 }

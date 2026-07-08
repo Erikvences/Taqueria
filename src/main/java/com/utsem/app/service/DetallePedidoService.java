@@ -52,7 +52,7 @@ public class DetallePedidoService {
 		Pedido pedido = pedidoRepo.findById(dto.getPedido().getId())
 				.orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado"));
 
-		Producto producto = productoRepo.findById(dto.getProducto().getId())
+		Producto producto = productoRepo.findById(dto.getProductoId())
 				.orElseThrow(() -> new EntityNotFoundException("Producto no encontrado"));
 
 		detalle.setPedido(pedido);
@@ -80,18 +80,12 @@ public class DetallePedidoService {
 			Pedido pedido = pedidoRepo.findById(dto.getPedido().getId())
 					.orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado"));
 
-			Producto producto = productoRepo.findById(dto.getProducto().getId())
-					.orElseThrow(() -> new EntityNotFoundException("Producto no encontrado"));
+			Producto producto = productoRepo.findById(dto.getProductoId())
+				.orElseThrow(() -> new EntityNotFoundException("Producto no encontrado"));
 
 			detalle.setPedido(pedido);
 			detalle.setProducto(producto);
 			detalle.setCantidad(dto.getCantidad());
-			detalle.setTopping(dto.getTopping());
-
-			if (producto.getPrecio() != null && dto.getCantidad() != null) {
-				detalle.setSubtotal(producto.getPrecio() * dto.getCantidad());
-			}
-
 			detallePedidoRepo.save(detalle);
 
 			recalcularTotalPedido(pedido);

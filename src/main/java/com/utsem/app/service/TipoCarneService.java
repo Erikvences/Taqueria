@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.utsem.app.dto.TipoCarneDTO;
 import com.utsem.app.model.TipoCarne;
 import com.utsem.app.repo.TipoCarneRepo;
+import com.utsem.app.repo.ProductoRepo;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -22,6 +23,9 @@ public class TipoCarneService {
 
 	@Autowired
 	ModelMapper mapper;
+
+	@Autowired
+	ProductoRepo productoRepo;
 
 	public List<TipoCarneDTO> listar() {
 		return tipoCarneRepo.findAll().stream()
@@ -46,7 +50,12 @@ public class TipoCarneService {
 	public void borrar(UUID uuid) {
 		Optional<TipoCarne> optTipoCarne = tipoCarneRepo.findByUuid(uuid);
 		if (optTipoCarne.isPresent()) {
-			tipoCarneRepo.delete(optTipoCarne.get());
+			com.utsem.app.model.TipoCarne tipo = optTipoCarne.get();
+			long referencias = productoRepo.countByTipoCarne(tipo);
+			if (referencias > 0) {
+				throw new IllegalStateException("No se puede eliminar el tipo de carne porque está asociado a productos.");
+			}
+			tipoCarneRepo.delete(tipo);
 		} else {
 			throw new EntityNotFoundException("Tipo de Carne no encontrado con el UUID: " + uuid);
 		}

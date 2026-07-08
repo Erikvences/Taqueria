@@ -13,4 +13,6 @@ public interface PedidoRepo extends JpaRepository<Pedido, Long> {
 	Optional<Pedido> findByUuid(UUID uuid);
 
 	void deleteByUuid(UUID uuid);
+	
+	long countByCliente(com.utsem.app.model.Cliente cliente);
 }

@@ -7,23 +7,29 @@ import com.utsem.app.model.Categoria;
 import com.utsem.app.model.TipoCarne;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 public class ProductoDTO {
 	@NotBlank(message = "¡Este campo es obligatorio!")
 	private String nombreProducto;
-	@NotBlank(message = "¡Este campo es obligatorio!")
+	@NotNull(message = "¡Este campo es obligatorio!")
 	private Float precio;
 	@NotBlank(message = "¡Este campo es obligatorio!")
 	private String descripcion;
 	private UUID uuid;
-	@NotBlank(message = "¡Este campo es obligatorio!")
+	@NotNull(message = "¡Este campo es obligatorio!")
 	private Categoria categoria;
-	@NotBlank(message = "¡Este campo es obligatorio!")
+	@NotNull(message = "¡Este campo es obligatorio!")
 	private TipoCarne tipoCarne;
 	private String gustaErikVD;
+	@NotBlank(message = "¡Este campo es obligatorio!")
 	private String gustaLuisAngelOS;
+
+	@NotBlank(message = "¡Este campo es obligatorio!")
 	private String gustaDaffneeAraniV;
+
+	@NotBlank(message = "¡Este campo es obligatorio!")
 	private String gustaFernandoDavidSM;
 	
 	
@@ -31,10 +37,10 @@ public class ProductoDTO {
 	public String getGustaRandom() {
 
 	    String[] nombres = {
-	        "Erik",
-	        "Luis Ángel",
-	        "Daffnee",
-	        "Fernando"
+	        "ErikVD",
+	        "LuisAngelOS",
+	        "DaffneeAraniV",
+	        "FernandoDavidSM"
 	    };
 
 	    String[] gustos = {

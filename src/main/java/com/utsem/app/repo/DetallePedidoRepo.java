@@ -19,4 +19,9 @@ public interface DetallePedidoRepo extends JpaRepository<DetallePedido, Long> {
 	List<DetallePedido> findByPedido(Pedido pedido);
 
 	void deleteByPedido(Pedido pedido);
+
+	// Cuenta detalles que referencian un producto dado
+	long countByProducto(com.utsem.app.model.Producto producto);
+	
+	
 }

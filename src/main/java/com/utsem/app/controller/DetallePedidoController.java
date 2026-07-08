@@ -46,8 +46,10 @@ public class DetallePedidoController {
 		return "/DetallePedido/detallePedido";
 	}
 
-	@GetMapping("nuevo/{uuidPedido}")
-	public String nuevo(@PathVariable UUID uuidPedido, Model model) {
+	    @GetMapping("nuevo/{uuidPedido}")
+	    public String nuevo(@PathVariable UUID uuidPedido,
+		    @org.springframework.web.bind.annotation.RequestParam(name = "fromNew", required = false) Boolean fromNew,
+		    Model model) {
 
 		Pedido pedido = pedidoService.obtenerEntidad(uuidPedido);
 
@@ -61,13 +63,14 @@ public class DetallePedidoController {
 		model.addAttribute("detallePedido", detallePedido);
 		model.addAttribute("pedido", pedido);
 		model.addAttribute("productos", productoRepo.findAll());
+		model.addAttribute("fromNew", Boolean.TRUE.equals(fromNew));
 
 		return "/DetallePedido/formularioDetallePedido";
 	}
 
 	@PostMapping("guardar")
-	public String guardar(@Valid @ModelAttribute("detallePedido") DetallePedidoDTO detallePedido,
-			BindingResult result, Model model) {
+	    public String guardar(@Valid @ModelAttribute("detallePedido") DetallePedidoDTO detallePedido,
+		    BindingResult result, @org.springframework.web.bind.annotation.RequestParam(name = "fromNew", required = false) Boolean fromNew, Model model) {
 
 		Pedido pedido = pedidoService.obtenerEntidad(detallePedido.getPedido().getUuid());
 
@@ -78,6 +81,7 @@ public class DetallePedidoController {
 		if (result.hasErrors()) {
 			model.addAttribute("pedido", pedido);
 			model.addAttribute("productos", productoRepo.findAll());
+			model.addAttribute("fromNew", Boolean.TRUE.equals(fromNew));
 			return "/DetallePedido/formularioDetallePedido";
 		}
 
@@ -95,6 +99,10 @@ public class DetallePedidoController {
 			return "redirect:/rutaDetallePedidos/pedido/" + detallePedido.getPedido().getUuid();
 		}
 
+		if (detallePedido.getProducto() != null) {
+			detallePedido.setProductoId(detallePedido.getProducto().getId());
+		}
+
 		model.addAttribute("detallePedido", detallePedido);
 		model.addAttribute("pedido", detallePedido.getPedido());
 		model.addAttribute("productos", productoRepo.findAll());
@@ -103,8 +111,8 @@ public class DetallePedidoController {
 	}
 
 	@PostMapping("actualizar")
-	public String actualizar(@Valid @ModelAttribute("detallePedido") DetallePedidoDTO detallePedido,
-			BindingResult result, Model model) {
+	    public String actualizar(@Valid @ModelAttribute("detallePedido") DetallePedidoDTO detallePedido,
+		    BindingResult result, @org.springframework.web.bind.annotation.RequestParam(name = "fromNew", required = false) Boolean fromNew, Model model) {
 
 		Pedido pedido = pedidoService.obtenerEntidad(detallePedido.getPedido().getUuid());
 
@@ -115,6 +123,7 @@ public class DetallePedidoController {
 		if (result.hasErrors()) {
 			model.addAttribute("pedido", pedido);
 			model.addAttribute("productos", productoRepo.findAll());
+			model.addAttribute("fromNew", Boolean.TRUE.equals(fromNew));
 			return "/DetallePedido/formularioDetallePedido";
 		}
 

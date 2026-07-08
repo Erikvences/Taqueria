@@ -66,7 +66,12 @@ public class TipoCarneController {
 
 	@GetMapping("eliminar/{uuid}")
 	public String metodoElimina(@PathVariable UUID uuid) {
+		try {
 		tipoCarneService.borrar(uuid);
 		return "redirect:/TipoCarne/listar";
+		} catch (IllegalStateException ex) {
+			// mostrar mensaje de error en la vista de listado
+			return "redirect:/Producto/listar?error=" + java.net.URLEncoder.encode(ex.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
+		}
 	}
 }

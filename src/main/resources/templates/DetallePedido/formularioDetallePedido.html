@@ -26,6 +26,8 @@
 				  th:action="${detallePedido.uuid == null} ? @{/rutaDetallePedidos/guardar} : @{/rutaDetallePedidos/actualizar}"
 				  method="post">
 
+				<input type="hidden" name="fromNew" th:value="${fromNew}" />
+
 				<input type="hidden" th:field="*{uuid}">
 				<input type="hidden" th:field="*{pedido.id}">
 				<input type="hidden" th:field="*{pedido.uuid}">
@@ -39,32 +41,42 @@
 				</div>
 
 				<div class="mb-3">
-					<label class="form-label">Producto</label>
+				<label for="producto" class="form-label fw-bold">Producto</label>
 
-					<select class="form-select" th:field="*{producto.id}">
-						<option value="">Seleccione un producto</option>
+				<select id="producto" class="form-select"
+					th:field="*{productoId}"
+					th:classappend="${#fields.hasErrors('productoId')} ? 'is-invalid' : ''">
+					<option value="">Seleccione un producto</option>
 
-						<option th:each="producto : ${productos}"
-								th:value="${producto.id}"
-								th:text="${producto.nombreProducto}">
-						</option>
-					</select>
+					<option th:each="producto : ${productos}"
+						th:value="${producto.id}"
+					th:text="${producto.nombreProducto + ' - ' + (producto.tipoCarne != null ? producto.tipoCarne.nombre : 'Sin tipo')}">
+					</option>
+				</select>
+				<div class="invalid-feedback"
+					th:if="${#fields.hasErrors('productoId')}"
+					th:errors="*{productoId}">
 				</div>
+			</div>
 
-				<div class="mb-3">
-					<label class="form-label">Cantidad</label>
+			<div class="mb-3">
+				<label for="cantidad" class="form-label fw-bold">Cantidad</label>
 
-					<input type="number"
-						   class="form-control"
-						   th:field="*{cantidad}"
-						   min="1">
+				<input id="cantidad" type="number"
+					class="form-control"
+					th:field="*{cantidad}"
+					th:classappend="${#fields.hasErrors('cantidad')} ? 'is-invalid' : ''"
+					min="1">
+				<div class="invalid-feedback"
+					th:if="${#fields.hasErrors('cantidad')}"
+					th:errors="*{cantidad}">
 				</div>
+			</div>
 
-				<div class="mb-3">
-					<label class="form-label">Topping</label>
+			<div class="mb-3">
+				<label for="topping" class="form-label fw-bold">Topping</label>
 
-					<input type="text"
-						   class="form-control"
+				<input id="topping" type="text"
 						   th:field="*{topping}"
 						   placeholder="Ejemplo: queso, salsa, cebolla...">
 				</div>
@@ -76,6 +88,13 @@
 					</button>
 
 					<a class="btn btn-secondary"
+					   th:if="${fromNew}"
+						th:onclick="|if(confirm('Si cancela, el pedido será eliminado. ¿Desea continuar?')) location.href='@{/rutaPedidos/eliminar/{uuid}(uuid=${pedido.uuid})}'; else return false;|">
+						Cancelar
+					</a>
+
+					<a class="btn btn-secondary"
+					   th:unless="${fromNew}"
 					   th:href="@{'/rutaDetallePedidos/pedido/' + ${pedido.uuid}}">
 						Cancelar
 					</a>

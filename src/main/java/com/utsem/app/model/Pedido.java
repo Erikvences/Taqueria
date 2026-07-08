@@ -26,7 +26,7 @@ public class Pedido {
 	@Column(unique = true)
 	private UUID uuid;
 	@ManyToOne
-	private Cliente Cliente;
+	private Cliente cliente;
 	
 	@PrePersist
 	private void inicializarUuid() {
@@ -52,10 +52,10 @@ public class Pedido {
 		this.estatus = estatus;
 	}
 	public Cliente getCliente() {
-		return Cliente;
+		return cliente;
 	}
 	public void setCliente(Cliente cliente) {
-		Cliente = cliente;
+		this.cliente = cliente;
 	}
 	public UUID getUuid() {
 		return uuid;

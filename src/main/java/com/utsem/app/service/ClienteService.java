@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.utsem.app.dto.ClienteDTO;
 import com.utsem.app.model.Cliente;
+import com.utsem.app.model.Producto;
 import com.utsem.app.repo.ClienteRepo;
+import com.utsem.app.repo.DetallePedidoRepo;
+import com.utsem.app.repo.PedidoRepo;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -20,6 +23,9 @@ public class ClienteService {
 
 	@Autowired
 	ClienteRepo clienteRepo;
+	
+	@Autowired
+	PedidoRepo pedidoRepo;
 
 	@Autowired
 	ModelMapper mapper;
@@ -55,6 +61,14 @@ public class ClienteService {
 
 	@Transactional
 	public void borrar2(UUID uuid) {
+		// buscar producto
+				Cliente cliente = clienteRepo.findByUuid(uuid)
+						.orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con UUID: " + uuid));
+				// verificar si está relacionado a detalles de pedidos
+				long referencias = pedidoRepo.countByCliente(cliente);
+				if (referencias > 0) {
+					throw new IllegalStateException("No se puede eliminar el cliente porque está asociado a pedidos.");
+				}
 		clienteRepo.deleteByUuid(uuid);
 	}
 
