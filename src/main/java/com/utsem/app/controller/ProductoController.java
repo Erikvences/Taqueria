@@ -27,42 +27,42 @@ public class ProductoController {
 	@GetMapping("listar")
 	public String Listar(Model model) {
 		model.addAttribute("Productos", productoService.listar());
-		return "/Producto/producto";
+		return "/Productos/productos";
 	}
 	
 	@GetMapping("Nuevo")
 	public String Nuevo(Model model) {
 		model.addAttribute("Producto", new ProductoDTO());
-		return "/Producto/formularioProducto";
+		return "/Productos/formularioProducto";
 	}
 	
 	
 	@PostMapping("guardar")
 	public String Guarda(@Valid  @ModelAttribute("Producto") ProductoDTO producto, BindingResult result, Model model) {
 		if(result.hasErrors()) {
-			return "/Producto/formularioProducto";
+			return "/Productos/formularioProducto";
 			
 		}
 		productoService.Guardar(producto);
-		return "redirect:/Producto/listar";
+		return "redirect:/Productos/listar";
 	}
 	
 	@PostMapping("actualizar")
 	public String Actualiza(@Valid @ModelAttribute("Producto") ProductoDTO producto, BindingResult result, Model model) {
 		if(result.hasErrors()) {
 			model.addAttribute("uuid", producto.getUuid());
-			return "/Producto/formularioProducto";
+			return "/Productos/formularioProducto";
 			
 		}
 		productoService.Actualizar(producto);
-		return "redirect:/Producto/listar";
+		return "redirect:/Productos/listar";
 	}
 	
 	@GetMapping("editar/{uuid}")
 	public String Editar(Model model, @PathVariable UUID uuid) {
 
 		model.addAttribute("Producto", productoService.obtenerProductoUUID(uuid));
-		return "/Producto/formularioProducto";
+		return "/Productos/formularioProducto";
 	}
 	
 	@GetMapping("eliminar/{uuid}")
@@ -70,6 +70,6 @@ public class ProductoController {
 
 		
 		productoService.borrar2(uuid);
-		return "redirect:/Producto/listar";
+		return "redirect:/Productos/listar";
 	}
 }

@@ -1,5 +1,6 @@
 package com.utsem.app.dto;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.utsem.app.model.Categoria;
@@ -25,6 +26,28 @@ public class ProductoDTO {
 	private String gustaDaffneeAraniV;
 	private String gustaFernandoDavidSM;
 	
+	
+	
+	public String getGustaRandom() {
+
+	    String[] nombres = {
+	        "Erik",
+	        "Luis Ángel",
+	        "Daffnee",
+	        "Fernando"
+	    };
+
+	    String[] gustos = {
+	        gustaErikVD,
+	        gustaLuisAngelOS,
+	        gustaDaffneeAraniV,
+	        gustaFernandoDavidSM
+	    };
+
+	    int indice = new Random().nextInt(gustos.length);
+
+	    return nombres[indice] + ": " + gustos[indice];
+	}
 	
 	public String getNombreProducto() {
 		return nombreProducto;
