@@ -10,7 +10,6 @@ public class PedidoDTO {
 
 	private Float total;
 
-	@NotNull(message = "Debe seleccionar un estatus")
 	private Estatus estatus;
 
 	private UUID uuid;

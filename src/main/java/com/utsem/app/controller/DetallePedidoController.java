@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.utsem.app.dto.DetallePedidoDTO;
+import com.utsem.app.model.DetallePedido;
 import com.utsem.app.model.Pedido;
 import com.utsem.app.repo.ProductoRepo;
 import com.utsem.app.service.DetallePedidoService;
@@ -23,14 +24,15 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("rutaDetallePedidos")
 public class DetallePedidoController {
-	@Autowired
-	DetallePedidoService detallePedidoService;
 
 	@Autowired
-	PedidoService pedidoService;
+	private DetallePedidoService detallePedidoService;
 
 	@Autowired
-	ProductoRepo productoRepo;
+	private PedidoService pedidoService;
+
+	@Autowired
+	private ProductoRepo productoRepo;
 
 	@GetMapping("pedido/{uuidPedido}")
 	public String listarPorPedido(@PathVariable UUID uuidPedido, Model model) {
@@ -49,6 +51,10 @@ public class DetallePedidoController {
 
 		Pedido pedido = pedidoService.obtenerEntidad(uuidPedido);
 
+		if (pedidoBloqueado(pedido)) {
+			return "redirect:/rutaDetallePedidos/pedido/" + pedido.getUuid();
+		}
+
 		DetallePedidoDTO detallePedido = new DetallePedidoDTO();
 		detallePedido.setPedido(pedido);
 
@@ -64,6 +70,10 @@ public class DetallePedidoController {
 			BindingResult result, Model model) {
 
 		Pedido pedido = pedidoService.obtenerEntidad(detallePedido.getPedido().getUuid());
+
+		if (pedidoBloqueado(pedido)) {
+			return "redirect:/rutaDetallePedidos/pedido/" + pedido.getUuid();
+		}
 
 		if (result.hasErrors()) {
 			model.addAttribute("pedido", pedido);
@@ -81,6 +91,10 @@ public class DetallePedidoController {
 
 		DetallePedidoDTO detallePedido = detallePedidoService.obtenerDetallePedidoUUID(uuid);
 
+		if (pedidoBloqueado(detallePedido.getPedido())) {
+			return "redirect:/rutaDetallePedidos/pedido/" + detallePedido.getPedido().getUuid();
+		}
+
 		model.addAttribute("detallePedido", detallePedido);
 		model.addAttribute("pedido", detallePedido.getPedido());
 		model.addAttribute("productos", productoRepo.findAll());
@@ -93,6 +107,10 @@ public class DetallePedidoController {
 			BindingResult result, Model model) {
 
 		Pedido pedido = pedidoService.obtenerEntidad(detallePedido.getPedido().getUuid());
+
+		if (pedidoBloqueado(pedido)) {
+			return "redirect:/rutaDetallePedidos/pedido/" + pedido.getUuid();
+		}
 
 		if (result.hasErrors()) {
 			model.addAttribute("pedido", pedido);
@@ -108,8 +126,20 @@ public class DetallePedidoController {
 	@GetMapping("eliminar/{uuid}")
 	public String eliminar(@PathVariable UUID uuid) {
 
+		DetallePedido detalle = detallePedidoService.obtenerEntidad(uuid);
+		Pedido pedido = detalle.getPedido();
+
+		if (pedidoBloqueado(pedido)) {
+			return "redirect:/rutaDetallePedidos/pedido/" + pedido.getUuid();
+		}
+
 		UUID uuidPedido = detallePedidoService.borrar(uuid);
 
 		return "redirect:/rutaDetallePedidos/pedido/" + uuidPedido;
+	}
+
+	private boolean pedidoBloqueado(Pedido pedido) {
+		return pedido.getEstatus().name().equals("Entregado")
+				|| pedido.getEstatus().name().equals("Cancelado");
 	}
 }

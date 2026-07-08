@@ -14,10 +14,10 @@
 
 	<div class="container mt-4">
 
-		<div class="card">
+		<div class="card shadow">
 
 			<div class="card-header bg-dark text-white">
-				<h4 th:text="${pedido.uuid == null} ? 'Nuevo Pedido' : 'Editar Pedido'"></h4>
+				<h3 th:text="${pedido.uuid == null} ? 'Nuevo Pedido' : 'Editar Pedido'"></h3>
 			</div>
 
 			<div class="card-body">
@@ -26,42 +26,84 @@
 					th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}"
 					method="post">
 
-					<input type="hidden" th:field="*{uuid}">
+					<input type="hidden" th:field="*{uuid}" />
+
+					<!-- CLIENTE -->
 
 					<div class="mb-3">
-						<label class="form-label">Cliente</label>
 
-						<select class="form-select" th:field="*{cliente.idCliente}">
-							<option value="">Seleccione un cliente</option>
+						<label class="form-label">
+							Cliente
+						</label>
 
-							<option th:each="cliente : ${clientes}"
-								th:value="${cliente.idCliente}"
+						<select class="form-select" th:field="*{cliente.idCliente}" required>
+
+							<option value="">
+								Seleccione un cliente
+							</option>
+
+							<option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}"
 								th:text="${cliente.nombre}">
 							</option>
+
 						</select>
+
 					</div>
 
-					<div class="mb-3">
-						<label class="form-label">Estatus</label>
+
+					<!-- NUEVO PEDIDO -->
+
+					<div class="mb-3" th:if="${pedido.uuid == null}">
+
+						<label class="form-label">
+							Estatus
+						</label>
+
+						<input type="text" class="form-control" value="Pendiente" readonly>
+
+					</div>
+
+
+					<!-- EDITAR PEDIDO -->
+
+					<div class="mb-3" th:if="${pedido.uuid != null}">
+
+						<label class="form-label">
+							Estatus
+						</label>
 
 						<select class="form-select" th:field="*{estatus}">
-							<option value="">Seleccione un estatus</option>
 
-							<option th:each="estado : ${estados}"
-								th:value="${estado}"
-								th:text="${estado}">
+							<option th:value="${pedido.estatus}" th:text="${pedido.estatus}">
 							</option>
+
+							<option value="Entregado">
+								Entregado
+							</option>
+
+							<option value="Cancelado">
+								Cancelado
+							</option>
+
 						</select>
+
 					</div>
 
-					<div class="d-flex gap-2">
+
+					<div class="mt-4">
+
 						<button type="submit" class="btn btn-success">
+
 							Guardar
+
 						</button>
 
 						<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">
+
 							Cancelar
+
 						</a>
+
 					</div>
 
 				</form>

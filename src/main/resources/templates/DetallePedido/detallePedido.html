@@ -10,140 +10,167 @@
 
 <body>
 
-<div th:replace="~{fragmentos :: menu}"></div>
+	<div th:replace="~{fragmentos :: menu}"></div>
 
-<div class="container mt-4">
+	<div class="container mt-4">
 
-	<div class="card">
+		<div class="card shadow">
 
-		<div class="card-header bg-dark text-white">
-			<h3>Detalle del Pedido</h3>
-		</div>
-
-		<div class="card-body">
-
-			<div class="row">
-
-				<div class="col-md-4">
-					<label><strong>Cliente</strong></label>
-					<input class="form-control"
-						   th:value="${pedido.cliente.nombre}"
-						   readonly>
-				</div>
-
-				<div class="col-md-4">
-					<label><strong>Estatus</strong></label>
-					<input class="form-control"
-						   th:value="${pedido.estatus}"
-						   readonly>
-				</div>
-
-				<div class="col-md-4">
-					<label><strong>Total</strong></label>
-					<input class="form-control"
-						   th:value="'$ '+${pedido.total}"
-						   readonly>
-				</div>
-
+			<div class="card-header bg-dark text-white">
+				<h3>Detalle del Pedido</h3>
 			</div>
 
-			<hr>
+			<div class="card-body">
 
-			<div class="mb-3">
+				<div class="row mb-4">
 
-				<a class="btn btn-success"
-				   th:href="@{'/rutaDetallePedidos/nuevo/' + ${pedido.uuid}}">
-					Agregar Producto
-				</a>
+					<div class="col-md-4">
+						<label><strong>Cliente</strong></label>
+						<input class="form-control" th:value="${pedido.cliente.nombre}" readonly>
+					</div>
 
-				<a class="btn btn-secondary"
-				   th:href="@{/rutaPedidos/listar}">
-					Volver
+					<div class="col-md-4">
+						<label><strong>Estatus</strong></label>
+						<input class="form-control" th:value="${pedido.estatus}" readonly>
+					</div>
+
+					<div class="col-md-4">
+						<label><strong>Total</strong></label>
+						<input class="form-control" th:value="'$ ' + ${pedido.total}" readonly>
+					</div>
+
+				</div>
+
+				<hr>
+
+				<!-- BOTONES -->
+
+				<div class="mb-3">
+
+					<a class="btn btn-success"
+						th:if="${pedido.estatus.name() != 'Entregado' and pedido.estatus.name() != 'Cancelado'}"
+						th:href="@{'/rutaDetallePedidos/nuevo/' + ${pedido.uuid}}">
+						Agregar Producto
+					</a>
+
+				</div>
+
+				<!-- MENSAJE -->
+
+				<div class="alert alert-warning"
+					th:if="${pedido.estatus.name() == 'Entregado' or pedido.estatus.name() == 'Cancelado'}">
+
+					<b>Este pedido ya fue finalizado.</b>
+
+					<br>
+
+					Solo puede consultar la información del pedido.
+
+				</div>
+
+				<table class="table table-bordered table-hover">
+
+					<thead class="table-dark">
+
+						<tr>
+
+							<th>Producto</th>
+							<th>Precio</th>
+							<th>Cantidad</th>
+							<th>Topping</th>
+							<th>Subtotal</th>
+							<th width="350">Reseña</th>
+							<th width="170">Acciones</th>
+
+						</tr>
+
+					</thead>
+
+					<tbody>
+
+						<tr th:each="detalle : ${detalles}">
+
+							<td th:text="${detalle.producto.nombreProducto}"></td>
+
+							<td th:text="'$ ' + ${detalle.producto.precio}"></td>
+
+							<td th:text="${detalle.cantidad}"></td>
+
+							<td th:text="${detalle.topping}"></td>
+
+							<td th:text="'$ ' + ${detalle.subtotal}"></td>
+
+							<td th:with="numero=${T(java.lang.Math).random()*4}">
+
+								<span th:if="${numero < 1}" th:text="${detalle.producto.gustaDaffneeAraniV}">
+								</span>
+
+								<span th:if="${numero >=1 and numero <2}" th:text="${detalle.producto.gustaErikVD}">
+								</span>
+
+								<span th:if="${numero >=2 and numero <3}"
+									th:text="${detalle.producto.gustaFernandoDavidSM}">
+								</span>
+
+								<span th:if="${numero >=3}" th:text="${detalle.producto.gustaLuisAngelOS}">
+								</span>
+
+							</td>
+
+							<td>
+
+								<div
+									th:if="${pedido.estatus.name() != 'Entregado' and pedido.estatus.name() != 'Cancelado'}">
+
+									<a class="btn btn-warning btn-sm"
+										th:href="@{'/rutaDetallePedidos/editar/' + ${detalle.uuid}}">
+										Editar
+									</a>
+
+									<a class="btn btn-danger btn-sm"
+										th:href="@{'/rutaDetallePedidos/eliminar/' + ${detalle.uuid}}"
+										onclick="return confirm('¿Eliminar este producto?');">
+										Eliminar
+									</a>
+
+								</div>
+
+								<div
+									th:if="${pedido.estatus.name() == 'Entregado' or pedido.estatus.name() == 'Cancelado'}">
+
+									<span class="badge bg-secondary fs-6">
+										Solo lectura
+									</span>
+
+								</div>
+
+							</td>
+
+						</tr>
+
+						<tr th:if="${#lists.isEmpty(detalles)}">
+
+							<td colspan="7" class="text-center">
+
+								No hay productos agregados.
+
+							</td>
+
+						</tr>
+
+					</tbody>
+
+				</table>
+
+				<a class="btn btn-secondary" th:href="@{/rutaPedidos/listar}">
+					Guardar
 				</a>
 
 			</div>
-
-			<table class="table table-bordered table-hover">
-
-				<thead class="table-dark">
-
-				<tr>
-
-					<th>Producto</th>
-					<th>Precio</th>
-					<th>Cantidad</th>
-					<th>Topping</th>
-					<th>Subtotal</th>
-
-					<th>Daffnee</th>
-					<th>Erik</th>
-					<th>Fernando</th>
-					<th>Luis</th>
-
-					<th>Acciones</th>
-
-				</tr>
-
-				</thead>
-
-				<tbody>
-
-				<tr th:each="detalle : ${detalles}">
-
-					<td th:text="${detalle.producto.nombreProducto}"></td>
-
-					<td th:text="'$ '+${detalle.producto.precio}"></td>
-
-					<td th:text="${detalle.cantidad}"></td>
-
-					<td th:text="${detalle.topping}"></td>
-
-					<td th:text="'$ '+${detalle.subtotal}"></td>
-
-					<td th:text="${detalle.producto.gustaDaffneeAraniV}"></td>
-
-					<td th:text="${detalle.producto.gustaErikVD}"></td>
-
-					<td th:text="${detalle.producto.gustaFernandoDavidSM}"></td>
-
-					<td th:text="${detalle.producto.gustaLuisAngelOS}"></td>
-
-					<td>
-
-						<a class="btn btn-warning btn-sm"
-						   th:href="@{'/rutaDetallePedidos/editar/' + ${detalle.uuid}}">
-							Editar
-						</a>
-
-						<a class="btn btn-danger btn-sm"
-						   th:href="@{'/rutaDetallePedidos/eliminar/' + ${detalle.uuid}}"
-						   onclick="return confirm('¿Eliminar este producto del pedido?');">
-							Eliminar
-						</a>
-
-					</td>
-
-				</tr>
-
-				<tr th:if="${#lists.isEmpty(detalles)}">
-
-					<td colspan="10" class="text-center">
-
-						No hay productos agregados.
-
-					</td>
-
-				</tr>
-
-				</tbody>
-
-			</table>
 
 		</div>
 
 	</div>
-
-</div>
 
 </body>
 

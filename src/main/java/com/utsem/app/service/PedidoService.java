@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.utsem.app.dto.PedidoDTO;
+import com.utsem.app.enums.Estatus;
 import com.utsem.app.model.Cliente;
 import com.utsem.app.model.Pedido;
 import com.utsem.app.repo.ClienteRepo;
@@ -41,14 +42,12 @@ public class PedidoService {
 				.orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
 
 		pedido.setCliente(cliente);
-
-		if (pedido.getTotal() == null) {
-			pedido.setTotal(0F);
-		}
+		pedido.setTotal(0F);
+		pedido.setEstatus(Estatus.Pendiente);
 
 		return pedidoRepo.save(pedido);
 	}
-
+	
 	public void actualizar(PedidoDTO pedidoDTO) {
 
 		Optional<Pedido> optPedido = pedidoRepo.findByUuid(pedidoDTO.getUuid());
@@ -56,6 +55,10 @@ public class PedidoService {
 		if (optPedido.isPresent()) {
 
 			Pedido pedido = optPedido.get();
+
+			if (pedido.getEstatus() == Estatus.Entregado || pedido.getEstatus() == Estatus.Cancelado) {
+				return;
+			}
 
 			Cliente cliente = clienteRepo.findById(pedidoDTO.getCliente().getIdCliente())
 					.orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
@@ -69,7 +72,6 @@ public class PedidoService {
 			throw new EntityNotFoundException("Pedido no encontrado con UUID: " + pedidoDTO.getUuid());
 		}
 	}
-
 	public PedidoDTO obtenerPedidoUUID(UUID uuid) {
 
 		Optional<Pedido> optPedido = pedidoRepo.findByUuid(uuid);

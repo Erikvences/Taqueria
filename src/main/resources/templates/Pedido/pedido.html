@@ -60,7 +60,8 @@
 						</a>
 
 						<a class="btn btn-warning btn-sm"
-							th:href="@{'/rutaPedidos/editar/' + ${pedido.uuid}}">
+						   th:if="${pedido.estatus.name() != 'Entregado' and pedido.estatus.name() != 'Cancelado'}"
+						   th:href="@{'/rutaPedidos/editar/' + ${pedido.uuid}}">
 							Editar
 						</a>
 
