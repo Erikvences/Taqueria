@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 
 
 @Entity
@@ -33,11 +34,12 @@ public class Pedido {
 	@Column
 	private String gustaLuisAngelOS;
 	@ManyToOne
-	private String Producto;
-	@ManyToOne
-	private Long idCliente;
+	private Cliente Cliente;
 	
-	private Long 
+	@PrePersist
+	private void inicializarUuid() {
+		this.uuid = UUID.randomUUID();
+	}
 	
 	public Long getId() {
 		return id;
@@ -56,12 +58,6 @@ public class Pedido {
 	}
 	public void setEstatus(Estatus estatus) {
 		this.estatus = estatus;
-	}
-	public UUID getUuid() {
-		return uuid;
-	}
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
 	}
 	public String getGustaDaffneeAraniV() {
 		return gustaDaffneeAraniV;
@@ -87,17 +83,17 @@ public class Pedido {
 	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
 		this.gustaLuisAngelOS = gustaLuisAngelOS;
 	}
-	public String getProducto() {
-		return Producto;
+	public Cliente getCliente() {
+		return Cliente;
 	}
-	public void setProducto(String producto) {
-		Producto = producto;
+	public void setCliente(Cliente cliente) {
+		Cliente = cliente;
 	}
-	public Long getIdCliente() {
-		return idCliente;
+	public UUID getUuid() {
+		return uuid;
 	}
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 	
 	

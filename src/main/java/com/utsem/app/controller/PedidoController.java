@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.utsem.app.dto.PedidoDTO;
 import com.utsem.app.enums.Estatus;
-import com.utsem.app.service.ClienteService;
+import com.utsem.app.model.Pedido;
+import com.utsem.app.repo.ClienteRepo;
 import com.utsem.app.service.PedidoService;
 
 import jakarta.validation.Valid;
@@ -22,77 +23,65 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("rutaPedidos")
 public class PedidoController {
-
 	@Autowired
 	PedidoService pedidoService;
 
 	@Autowired
-	ClienteService clienteService;
+	ClienteRepo clienteRepo;
 
 	@GetMapping("listar")
 	public String metodoListar(Model model) {
-
-		model.addAttribute("mensaje", "Lista de Pedidos");
 		model.addAttribute("pedidos", pedidoService.listar());
-
-		return "/Pedido/paginaPedidos";
+		return "/Pedido/pedido";
 	}
 
 	@GetMapping("nuevo")
 	public String metodoNuevo(Model model) {
-
 		model.addAttribute("pedido", new PedidoDTO());
-		model.addAttribute("clientes", clienteService.listar());
+		model.addAttribute("clientes", clienteRepo.findAll());
 		model.addAttribute("estados", Estatus.values());
-
 		return "/Pedido/formularioPedido";
 	}
 
 	@PostMapping("guardar")
 	public String metodoGuardar(@Valid @ModelAttribute("pedido") PedidoDTO pedido,
-			BindingResult result,
-			Model model) {
+			BindingResult result, Model model) {
 
 		if (result.hasErrors()) {
-
-			model.addAttribute("clientes", clienteService.listar());
+			model.addAttribute("clientes", clienteRepo.findAll());
 			model.addAttribute("estados", Estatus.values());
-
 			return "/Pedido/formularioPedido";
 		}
 
-		pedidoService.guardar(pedido);
+		Pedido pedidoGuardado = pedidoService.guardar(pedido);
 
-		return "redirect:/rutaPedidos/listar";
+		return "redirect:/rutaDetallePedidos/pedido/" + pedidoGuardado.getUuid();
 	}
 
 	@GetMapping("editar/{uuid}")
 	public String metodoEditar(Model model, @PathVariable UUID uuid) {
-
 		model.addAttribute("pedido", pedidoService.obtenerPedidoUUID(uuid));
-		model.addAttribute("clientes", clienteService.listar());
+		model.addAttribute("clientes", clienteRepo.findAll());
 		model.addAttribute("estados", Estatus.values());
-
 		return "/Pedido/formularioPedido";
 	}
 
 	@PostMapping("actualizar")
-	public String metodoActualizar(@Valid @ModelAttribute("pedido") PedidoDTO pedido,
-			BindingResult result,
-			Model model) {
+	public String metodoActualizar(@Valid @ModelAttribute("pedido") PedidoDTO pedido, BindingResult result, Model model) {
 
 		if (result.hasErrors()) {
-
-			model.addAttribute("clientes", clienteService.listar());
+			model.addAttribute("clientes", clienteRepo.findAll());
 			model.addAttribute("estados", Estatus.values());
-
 			return "/Pedido/formularioPedido";
 		}
 
 		pedidoService.actualizar(pedido);
-
 		return "redirect:/rutaPedidos/listar";
 	}
 
+	@GetMapping("eliminar/{uuid}")
+	public String metodoEliminar(@PathVariable UUID uuid) {
+		pedidoService.borrar2(uuid);
+		return "redirect:/rutaPedidos/listar";
+	}
 }
-

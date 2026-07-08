@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Pedidos</title>
+	<div th:replace="~{fragmentos :: bootstrap}"></div>
+</head>
+
+<body>
+	<div th:replace="~{fragmentos :: menu}"></div>
+
+	<div class="container mt-4">
+
+		<div class="d-flex justify-content-between mb-3">
+			<h1>Pedidos</h1>
+			<a th:href="@{/rutaPedidos/nuevo}" class="btn btn-primary">Nuevo Pedido</a>
+		</div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Cliente</th>
+					<th>Total</th>
+					<th>Estatus</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="pedido : ${pedidos}">
+					<td th:text="${pedido.cliente != null ? pedido.cliente.nombre : 'Sin cliente'}"></td>
+					<td th:text="${pedido.total}"></td>
+					<td th:text="${pedido.estatus}"></td>
+					<td>
+						<a th:href="@{'/rutaDetallePedidos/pedido/' + ${pedido.uuid}}" class="btn btn-sm btn-success">
+							Detalle
+						</a>
+
+						<a th:href="@{'/rutaPedidos/editar/' + ${pedido.uuid}}" class="btn btn-sm btn-warning">
+							Editar
+						</a>
+
+						<a th:href="@{'/rutaPedidos/eliminar/' + ${pedido.uuid}}" class="btn btn-sm btn-danger"
+							onclick="return confirm('¿Eliminar pedido?')">
+							Eliminar
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</body>
+
+</html>

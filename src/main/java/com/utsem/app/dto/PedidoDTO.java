@@ -3,36 +3,34 @@ package com.utsem.app.dto;
 import java.util.UUID;
 
 import com.utsem.app.enums.Estatus;
+import com.utsem.app.model.Cliente;
+import com.utsem.app.model.Producto;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public class PedidoDTO {
 
+	private Float total;
 	private Estatus estatus;
 	private UUID uuid;
-	private String cliente;
 	private String gustaDaffneeAraniV;
 	private String gustaErikVD;
 	private String gustaFernandoDavidSM;
 	private String gustaLuisAngelOS;
-	private Long idCliente;
-	private String producto;
+	private Cliente cliente;
 	
+	
+	public Float getTotal() {
+		return total;
+	}
+	public void setTotal(Float total) {
+		this.total = total;
+	}
 	public Estatus getEstatus() {
 		return estatus;
 	}
 	public void setEstatus(Estatus estatus) {
 		this.estatus = estatus;
-	}
-	public UUID getUuid() {
-		return uuid;
-	}
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-	public String getCliente() {
-		return cliente;
-	}
-	public void setCliente(String cliente) {
-		this.cliente = cliente;
 	}
 	public String getGustaDaffneeAraniV() {
 		return gustaDaffneeAraniV;
@@ -58,19 +56,19 @@ public class PedidoDTO {
 	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
 		this.gustaLuisAngelOS = gustaLuisAngelOS;
 	}
-	public Long getIdCliente() {
-		return idCliente;
+	public UUID getUuid() {
+		return uuid;
 	}
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
-	}
-	public String getProducto() {
-		return producto;
-	}
-	public void setProducto(String producto) {
-		this.producto = producto;
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 	
-	
+	public Cliente getCliente() {
+		return cliente;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
 	
 }

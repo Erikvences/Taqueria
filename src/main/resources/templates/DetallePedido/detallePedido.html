@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Detalle Pedido</title>
+	<div th:replace="~{fragmentos :: bootstrap}"></div>
+</head>
+
+<body>
+	<div th:replace="~{fragmentos :: menu}"></div>
+
+	<div class="container mt-4">
+
+		<div class="d-flex justify-content-between mb-3">
+			<div>
+				<h1>Detalle del Pedido</h1>
+				<p>
+					Cliente:
+					<span th:text="${pedido.cliente != null ? pedido.cliente.nombre : 'Sin cliente'}"></span>
+				</p>
+				<p>
+					Total:
+					<span th:text="${pedido.total}"></span>
+				</p>
+			</div>
+
+			<div>
+				<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">Volver</a>
+				<a th:href="@{'/rutaDetallePedidos/nuevo/' + ${uuidPedido}}" class="btn btn-primary">
+					Agregar producto
+				</a>
+			</div>
+		</div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Producto</th>
+					<th>Cantidad</th>
+					<th>Subtotal</th>
+					<th>Topping</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="detalle : ${detalles}">
+					<td th:text="${detalle.producto != null ? detalle.producto.nombreProducto : 'Sin producto'}"></td>
+					<td th:text="${detalle.cantidad}"></td>
+					<td th:text="${detalle.subtotal}"></td>
+					<td th:text="${detalle.topping}"></td>
+					<td>
+						<a th:href="@{'/rutaDetallePedidos/editar/' + ${detalle.uuid}}" class="btn btn-sm btn-warning">
+							Editar
+						</a>
+
+						<a th:href="@{'/rutaDetallePedidos/eliminar/' + ${detalle.uuid}}" class="btn btn-sm btn-danger"
+							onclick="return confirm('¿Eliminar producto del pedido?')">
+							Eliminar
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</body>
+
+</html>
