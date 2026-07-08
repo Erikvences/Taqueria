@@ -44,7 +44,7 @@ public class PedidoController {
 	}
 
 	@PostMapping("guardar")
-	public String metodoGuardar(@Valid @ModelAttribute("pedido") PedidoDTO pedido,
+	public String metodoGuardar(@Valid @ModelAttribute("pedido") PedidoDTO pedidoDTO,
 			BindingResult result, Model model) {
 
 		if (result.hasErrors()) {
@@ -53,13 +53,13 @@ public class PedidoController {
 			return "/Pedido/formularioPedido";
 		}
 
-		Pedido pedidoGuardado = pedidoService.guardar(pedido);
+		Pedido pedidoGuardado = pedidoService.guardar(pedidoDTO);
 
-		return "redirect:/rutaDetallePedidos/pedido/" + pedidoGuardado.getUuid();
+		return "redirect:/rutaDetallePedidos/nuevo/" + pedidoGuardado.getUuid();
 	}
 
 	@GetMapping("editar/{uuid}")
-	public String metodoEditar(Model model, @PathVariable UUID uuid) {
+	public String metodoEditar(@PathVariable UUID uuid, Model model) {
 		model.addAttribute("pedido", pedidoService.obtenerPedidoUUID(uuid));
 		model.addAttribute("clientes", clienteRepo.findAll());
 		model.addAttribute("estados", Estatus.values());
@@ -67,7 +67,8 @@ public class PedidoController {
 	}
 
 	@PostMapping("actualizar")
-	public String metodoActualizar(@Valid @ModelAttribute("pedido") PedidoDTO pedido, BindingResult result, Model model) {
+	public String metodoActualizar(@Valid @ModelAttribute("pedido") PedidoDTO pedidoDTO, BindingResult result,
+			Model model) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("clientes", clienteRepo.findAll());
@@ -75,13 +76,14 @@ public class PedidoController {
 			return "/Pedido/formularioPedido";
 		}
 
-		pedidoService.actualizar(pedido);
+		pedidoService.actualizar(pedidoDTO);
+
 		return "redirect:/rutaPedidos/listar";
 	}
 
 	@GetMapping("eliminar/{uuid}")
 	public String metodoEliminar(@PathVariable UUID uuid) {
-		pedidoService.borrar2(uuid);
+		pedidoService.borrar(uuid);
 		return "redirect:/rutaPedidos/listar";
 	}
 }

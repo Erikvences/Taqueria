@@ -3,41 +3,34 @@ package com.utsem.app.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.utsem.app.dto.PedidoDTO;
-import com.utsem.app.enums.Estatus;
 import com.utsem.app.model.Cliente;
-import com.utsem.app.model.DetallePedido;
 import com.utsem.app.model.Pedido;
 import com.utsem.app.repo.ClienteRepo;
 import com.utsem.app.repo.DetallePedidoRepo;
 import com.utsem.app.repo.PedidoRepo;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
 public class PedidoService {
+	@Autowired
+	private PedidoRepo pedidoRepo;
+	
+	@Autowired
+	private DetallePedidoRepo detallePedidoRepo;
 
 	@Autowired
-	PedidoRepo pedidoRepo;
+	private ClienteRepo clienteRepo;
 
 	@Autowired
-	ClienteRepo clienteRepo;
-
-	@Autowired
-	DetallePedidoRepo detallePedidoRepo;
-
-	@Autowired
-	ModelMapper mapper;
+	private ModelMapper mapper;
 
 	public List<PedidoDTO> listar() {
-		return pedidoRepo.findAll().stream()
-				.map(pedido -> mapper.map(pedido, PedidoDTO.class))
-				.toList();
+		return pedidoRepo.findAll().stream().map(pedido -> mapper.map(pedido, PedidoDTO.class)).toList();
 	}
 
 	public Pedido guardar(PedidoDTO pedidoDTO) {
@@ -51,10 +44,6 @@ public class PedidoService {
 
 		if (pedido.getTotal() == null) {
 			pedido.setTotal(0F);
-		}
-
-		if (pedido.getEstatus() == null) {
-			pedido.setEstatus(Estatus.Pendiente);
 		}
 
 		return pedidoRepo.save(pedido);
@@ -73,10 +62,6 @@ public class PedidoService {
 
 			pedido.setCliente(cliente);
 			pedido.setEstatus(pedidoDTO.getEstatus());
-			pedido.setGustaDaffneeAraniV(pedidoDTO.getGustaDaffneeAraniV());
-			pedido.setGustaErikVD(pedidoDTO.getGustaErikVD());
-			pedido.setGustaFernandoDavidSM(pedidoDTO.getGustaFernandoDavidSM());
-			pedido.setGustaLuisAngelOS(pedidoDTO.getGustaLuisAngelOS());
 
 			pedidoRepo.save(pedido);
 
@@ -91,36 +76,25 @@ public class PedidoService {
 
 		if (optPedido.isPresent()) {
 			return mapper.map(optPedido.get(), PedidoDTO.class);
-		} else {
-			throw new EntityNotFoundException("Pedido no encontrado con UUID: " + uuid);
 		}
+
+		throw new EntityNotFoundException("Pedido no encontrado con UUID: " + uuid);
 	}
 
-	public Pedido obtenerPedidoEntidadUUID(UUID uuid) {
+	public Pedido obtenerEntidad(UUID uuid) {
+
 		return pedidoRepo.findByUuid(uuid)
 				.orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con UUID: " + uuid));
 	}
 
-	public void recalcularTotal(Pedido pedido) {
-
-		List<DetallePedido> detalles = detallePedidoRepo.findByPedido(pedido);
-
-		Float total = detalles.stream()
-				.map(DetallePedido::getSubtotal)
-				.filter(subtotal -> subtotal != null)
-				.reduce(0F, Float::sum);
-
-		pedido.setTotal(total);
-		pedidoRepo.save(pedido);
-	}
-
 	@Transactional
-	public void borrar2(UUID uuid) {
+	public void borrar(UUID uuid) {
 
 		Pedido pedido = pedidoRepo.findByUuid(uuid)
 				.orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con UUID: " + uuid));
 
 		detallePedidoRepo.deleteByPedido(pedido);
+
 		pedidoRepo.delete(pedido);
 	}
 }

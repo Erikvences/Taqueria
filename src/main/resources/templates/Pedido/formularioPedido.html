@@ -1,50 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
-	<title>Pedido</title>
+	<title>Formulario Pedido</title>
+
 	<div th:replace="~{fragmentos :: bootstrap}"></div>
 </head>
 
 <body>
+
 	<div th:replace="~{fragmentos :: menu}"></div>
 
 	<div class="container mt-4">
-		<h1 th:text="${pedido.uuid == null} ? 'Nuevo Pedido' : 'Editar Pedido'"></h1>
 
-		<form th:object="${pedido}"
-			th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}"
-			method="post">
+		<div class="card">
 
-			<input type="hidden" th:field="*{uuid}">
-
-			<div class="mb-3">
-				<label class="form-label">Cliente</label>
-				<select class="form-control" th:field="*{cliente.idCliente}">
-					<option value="">Seleccione un cliente</option>
-					<option th:each="cliente : ${clientes}"
-						th:value="${cliente.idCliente}"
-						th:text="${cliente.nombre}">
-					</option>
-				</select>
+			<div class="card-header bg-dark text-white">
+				<h4 th:text="${pedido.uuid == null} ? 'Nuevo Pedido' : 'Editar Pedido'"></h4>
 			</div>
 
-			<div class="mb-3">
-				<label class="form-label">Estatus</label>
-				<select class="form-control" th:field="*{estatus}">
-					<option value="">Seleccione un estatus</option>
-					<option th:each="estado : ${estados}"
-						th:value="${estado}"
-						th:text="${estado}">
-					</option>
-				</select>
+			<div class="card-body">
+
+				<form th:object="${pedido}"
+					th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}"
+					method="post">
+
+					<input type="hidden" th:field="*{uuid}">
+
+					<div class="mb-3">
+						<label class="form-label">Cliente</label>
+
+						<select class="form-select" th:field="*{cliente.idCliente}">
+							<option value="">Seleccione un cliente</option>
+
+							<option th:each="cliente : ${clientes}"
+								th:value="${cliente.idCliente}"
+								th:text="${cliente.nombre}">
+							</option>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Estatus</label>
+
+						<select class="form-select" th:field="*{estatus}">
+							<option value="">Seleccione un estatus</option>
+
+							<option th:each="estado : ${estados}"
+								th:value="${estado}"
+								th:text="${estado}">
+							</option>
+						</select>
+					</div>
+
+					<div class="d-flex gap-2">
+						<button type="submit" class="btn btn-success">
+							Guardar
+						</button>
+
+						<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">
+							Cancelar
+						</a>
+					</div>
+
+				</form>
+
 			</div>
 
-			<button type="submit" class="btn btn-success">Guardar</button>
-			<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">Cancelar</a>
-		</form>
+		</div>
+
 	</div>
+
 </body>
 
 </html>

@@ -10,13 +10,21 @@ import jakarta.validation.constraints.NotNull;
 
 public class DetallePedidoDTO {
 
-
-	private Producto producto;
-	private Pedido pedido;
-	private Integer cantidad;
-	private Float subtotal;
-	private String topping;
 	private UUID uuid;
+
+	@NotNull(message = "Debe seleccionar un producto")
+	private Producto producto;
+
+	@NotNull(message = "Debe seleccionar un pedido")
+	private Pedido pedido;
+
+	@NotNull(message = "La cantidad es obligatoria")
+	@Min(value = 1, message = "La cantidad debe ser mayor a 0")
+	private Integer cantidad;
+
+	private Float subtotal;
+
+	private String topping;
 	 
 	 public Producto getProducto() {
 		 return producto;

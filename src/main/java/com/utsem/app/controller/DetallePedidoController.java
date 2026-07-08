@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.utsem.app.dto.DetallePedidoDTO;
-import com.utsem.app.model.DetallePedido;
 import com.utsem.app.model.Pedido;
 import com.utsem.app.repo.ProductoRepo;
 import com.utsem.app.service.DetallePedidoService;
@@ -24,7 +23,6 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("rutaDetallePedidos")
 public class DetallePedidoController {
-
 	@Autowired
 	DetallePedidoService detallePedidoService;
 
@@ -37,7 +35,7 @@ public class DetallePedidoController {
 	@GetMapping("pedido/{uuidPedido}")
 	public String listarPorPedido(@PathVariable UUID uuidPedido, Model model) {
 
-		Pedido pedido = pedidoService.obtenerPedidoEntidadUUID(uuidPedido);
+		Pedido pedido = pedidoService.obtenerEntidad(uuidPedido);
 
 		model.addAttribute("pedido", pedido);
 		model.addAttribute("uuidPedido", uuidPedido);
@@ -49,12 +47,12 @@ public class DetallePedidoController {
 	@GetMapping("nuevo/{uuidPedido}")
 	public String nuevo(@PathVariable UUID uuidPedido, Model model) {
 
-		Pedido pedido = pedidoService.obtenerPedidoEntidadUUID(uuidPedido);
+		Pedido pedido = pedidoService.obtenerEntidad(uuidPedido);
 
-		DetallePedidoDTO detalle = new DetallePedidoDTO();
-		detalle.setPedido(pedido);
+		DetallePedidoDTO detallePedido = new DetallePedidoDTO();
+		detallePedido.setPedido(pedido);
 
-		model.addAttribute("detallePedido", detalle);
+		model.addAttribute("detallePedido", detallePedido);
 		model.addAttribute("pedido", pedido);
 		model.addAttribute("productos", productoRepo.findAll());
 
@@ -65,7 +63,7 @@ public class DetallePedidoController {
 	public String guardar(@Valid @ModelAttribute("detallePedido") DetallePedidoDTO detallePedido,
 			BindingResult result, Model model) {
 
-		Pedido pedido = pedidoService.obtenerPedidoEntidadUUID(detallePedido.getPedido().getUuid());
+		Pedido pedido = pedidoService.obtenerEntidad(detallePedido.getPedido().getUuid());
 
 		if (result.hasErrors()) {
 			model.addAttribute("pedido", pedido);
@@ -81,10 +79,10 @@ public class DetallePedidoController {
 	@GetMapping("editar/{uuid}")
 	public String editar(@PathVariable UUID uuid, Model model) {
 
-		DetallePedidoDTO detalle = detallePedidoService.obtenerDetallePedidoUUID(uuid);
+		DetallePedidoDTO detallePedido = detallePedidoService.obtenerDetallePedidoUUID(uuid);
 
-		model.addAttribute("detallePedido", detalle);
-		model.addAttribute("pedido", detalle.getPedido());
+		model.addAttribute("detallePedido", detallePedido);
+		model.addAttribute("pedido", detallePedido.getPedido());
 		model.addAttribute("productos", productoRepo.findAll());
 
 		return "/DetallePedido/formularioDetallePedido";
@@ -94,7 +92,7 @@ public class DetallePedidoController {
 	public String actualizar(@Valid @ModelAttribute("detallePedido") DetallePedidoDTO detallePedido,
 			BindingResult result, Model model) {
 
-		Pedido pedido = pedidoService.obtenerPedidoEntidadUUID(detallePedido.getPedido().getUuid());
+		Pedido pedido = pedidoService.obtenerEntidad(detallePedido.getPedido().getUuid());
 
 		if (result.hasErrors()) {
 			model.addAttribute("pedido", pedido);
@@ -110,10 +108,7 @@ public class DetallePedidoController {
 	@GetMapping("eliminar/{uuid}")
 	public String eliminar(@PathVariable UUID uuid) {
 
-		DetallePedido detalle = detallePedidoService.obtenerDetalleEntidadUUID(uuid);
-		UUID uuidPedido = detalle.getPedido().getUuid();
-
-		detallePedidoService.borrar2(uuid);
+		UUID uuidPedido = detallePedidoService.borrar(uuid);
 
 		return "redirect:/rutaDetallePedidos/pedido/" + uuidPedido;
 	}

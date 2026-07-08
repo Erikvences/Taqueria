@@ -25,14 +25,6 @@ public class Pedido {
 	private Estatus estatus;
 	@Column(unique = true)
 	private UUID uuid;
-	@Column
-	private String gustaDaffneeAraniV;
-	@Column
-	private String gustaErikVD;
-	@Column
-	private String gustaFernandoDavidSM;
-	@Column
-	private String gustaLuisAngelOS;
 	@ManyToOne
 	private Cliente Cliente;
 	
@@ -58,30 +50,6 @@ public class Pedido {
 	}
 	public void setEstatus(Estatus estatus) {
 		this.estatus = estatus;
-	}
-	public String getGustaDaffneeAraniV() {
-		return gustaDaffneeAraniV;
-	}
-	public void setGustaDaffneeAraniV(String gustaDaffneeAraniV) {
-		this.gustaDaffneeAraniV = gustaDaffneeAraniV;
-	}
-	public String getGustaErikVD() {
-		return gustaErikVD;
-	}
-	public void setGustaErikVD(String gustaErikVD) {
-		this.gustaErikVD = gustaErikVD;
-	}
-	public String getGustaFernandoDavidSM() {
-		return gustaFernandoDavidSM;
-	}
-	public void setGustaFernandoDavidSM(String gustaFernandoDavidSM) {
-		this.gustaFernandoDavidSM = gustaFernandoDavidSM;
-	}
-	public String getGustaLuisAngelOS() {
-		return gustaLuisAngelOS;
-	}
-	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
-		this.gustaLuisAngelOS = gustaLuisAngelOS;
 	}
 	public Cliente getCliente() {
 		return Cliente;

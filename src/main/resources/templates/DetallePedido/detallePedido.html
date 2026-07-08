@@ -1,70 +1,150 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
-	<title>Detalle Pedido</title>
+	<title>Detalle del Pedido</title>
+
 	<div th:replace="~{fragmentos :: bootstrap}"></div>
 </head>
 
 <body>
-	<div th:replace="~{fragmentos :: menu}"></div>
 
-	<div class="container mt-4">
+<div th:replace="~{fragmentos :: menu}"></div>
 
-		<div class="d-flex justify-content-between mb-3">
-			<div>
-				<h1>Detalle del Pedido</h1>
-				<p>
-					Cliente:
-					<span th:text="${pedido.cliente != null ? pedido.cliente.nombre : 'Sin cliente'}"></span>
-				</p>
-				<p>
-					Total:
-					<span th:text="${pedido.total}"></span>
-				</p>
-			</div>
+<div class="container mt-4">
 
-			<div>
-				<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">Volver</a>
-				<a th:href="@{'/rutaDetallePedidos/nuevo/' + ${uuidPedido}}" class="btn btn-primary">
-					Agregar producto
-				</a>
-			</div>
+	<div class="card">
+
+		<div class="card-header bg-dark text-white">
+			<h3>Detalle del Pedido</h3>
 		</div>
 
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Producto</th>
-					<th>Cantidad</th>
-					<th>Subtotal</th>
-					<th>Topping</th>
-					<th>Acciones</th>
-				</tr>
-			</thead>
+		<div class="card-body">
 
-			<tbody>
+			<div class="row">
+
+				<div class="col-md-4">
+					<label><strong>Cliente</strong></label>
+					<input class="form-control"
+						   th:value="${pedido.cliente.nombre}"
+						   readonly>
+				</div>
+
+				<div class="col-md-4">
+					<label><strong>Estatus</strong></label>
+					<input class="form-control"
+						   th:value="${pedido.estatus}"
+						   readonly>
+				</div>
+
+				<div class="col-md-4">
+					<label><strong>Total</strong></label>
+					<input class="form-control"
+						   th:value="'$ '+${pedido.total}"
+						   readonly>
+				</div>
+
+			</div>
+
+			<hr>
+
+			<div class="mb-3">
+
+				<a class="btn btn-success"
+				   th:href="@{'/rutaDetallePedidos/nuevo/' + ${pedido.uuid}}">
+					Agregar Producto
+				</a>
+
+				<a class="btn btn-secondary"
+				   th:href="@{/rutaPedidos/listar}">
+					Volver
+				</a>
+
+			</div>
+
+			<table class="table table-bordered table-hover">
+
+				<thead class="table-dark">
+
+				<tr>
+
+					<th>Producto</th>
+					<th>Precio</th>
+					<th>Cantidad</th>
+					<th>Topping</th>
+					<th>Subtotal</th>
+
+					<th>Daffnee</th>
+					<th>Erik</th>
+					<th>Fernando</th>
+					<th>Luis</th>
+
+					<th>Acciones</th>
+
+				</tr>
+
+				</thead>
+
+				<tbody>
+
 				<tr th:each="detalle : ${detalles}">
-					<td th:text="${detalle.producto != null ? detalle.producto.nombreProducto : 'Sin producto'}"></td>
+
+					<td th:text="${detalle.producto.nombreProducto}"></td>
+
+					<td th:text="'$ '+${detalle.producto.precio}"></td>
+
 					<td th:text="${detalle.cantidad}"></td>
-					<td th:text="${detalle.subtotal}"></td>
+
 					<td th:text="${detalle.topping}"></td>
+
+					<td th:text="'$ '+${detalle.subtotal}"></td>
+
+					<td th:text="${detalle.producto.gustaDaffneeAraniV}"></td>
+
+					<td th:text="${detalle.producto.gustaErikVD}"></td>
+
+					<td th:text="${detalle.producto.gustaFernandoDavidSM}"></td>
+
+					<td th:text="${detalle.producto.gustaLuisAngelOS}"></td>
+
 					<td>
-						<a th:href="@{'/rutaDetallePedidos/editar/' + ${detalle.uuid}}" class="btn btn-sm btn-warning">
+
+						<a class="btn btn-warning btn-sm"
+						   th:href="@{'/rutaDetallePedidos/editar/' + ${detalle.uuid}}">
 							Editar
 						</a>
 
-						<a th:href="@{'/rutaDetallePedidos/eliminar/' + ${detalle.uuid}}" class="btn btn-sm btn-danger"
-							onclick="return confirm('¿Eliminar producto del pedido?')">
+						<a class="btn btn-danger btn-sm"
+						   th:href="@{'/rutaDetallePedidos/eliminar/' + ${detalle.uuid}}"
+						   onclick="return confirm('¿Eliminar este producto del pedido?');">
 							Eliminar
 						</a>
+
 					</td>
+
 				</tr>
-			</tbody>
-		</table>
+
+				<tr th:if="${#lists.isEmpty(detalles)}">
+
+					<td colspan="10" class="text-center">
+
+						No hay productos agregados.
+
+					</td>
+
+				</tr>
+
+				</tbody>
+
+			</table>
+
+		</div>
 
 	</div>
+
+</div>
+
 </body>
 
 </html>

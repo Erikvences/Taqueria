@@ -32,9 +32,6 @@ public class DetallePedidoService {
 	ProductoRepo productoRepo;
 
 	@Autowired
-	PedidoService pedidoService;
-
-	@Autowired
 	ModelMapper mapper;
 
 	public List<DetallePedidoDTO> listarPorPedido(UUID uuidPedido) {
@@ -42,7 +39,8 @@ public class DetallePedidoService {
 		Pedido pedido = pedidoRepo.findByUuid(uuidPedido)
 				.orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado"));
 
-		return detallePedidoRepo.findByPedido(pedido).stream()
+		return detallePedidoRepo.findByPedido(pedido)
+				.stream()
 				.map(detalle -> mapper.map(detalle, DetallePedidoDTO.class))
 				.toList();
 	}
@@ -67,7 +65,8 @@ public class DetallePedidoService {
 		}
 
 		detallePedidoRepo.save(detalle);
-		pedidoService.recalcularTotal(pedido);
+
+		recalcularTotalPedido(pedido);
 	}
 
 	public void actualizar(DetallePedidoDTO dto) {
@@ -94,7 +93,8 @@ public class DetallePedidoService {
 			}
 
 			detallePedidoRepo.save(detalle);
-			pedidoService.recalcularTotal(pedido);
+
+			recalcularTotalPedido(pedido);
 
 		} else {
 			throw new EntityNotFoundException("DetallePedido no encontrado con UUID: " + dto.getUuid());
@@ -107,28 +107,42 @@ public class DetallePedidoService {
 
 		if (optDetalle.isPresent()) {
 			return mapper.map(optDetalle.get(), DetallePedidoDTO.class);
-		} else {
-			throw new EntityNotFoundException("DetallePedido no encontrado con UUID: " + uuid);
 		}
+
+		throw new EntityNotFoundException("DetallePedido no encontrado con UUID: " + uuid);
 	}
 
-	public DetallePedido obtenerDetalleEntidadUUID(UUID uuid) {
+	public DetallePedido obtenerEntidad(UUID uuid) {
 		return detallePedidoRepo.findByUuid(uuid)
 				.orElseThrow(() -> new EntityNotFoundException("DetallePedido no encontrado con UUID: " + uuid));
 	}
 
 	@Transactional
-	public UUID borrar2(UUID uuid) {
+	public UUID borrar(UUID uuid) {
 
 		DetallePedido detalle = detallePedidoRepo.findByUuid(uuid)
 				.orElseThrow(() -> new EntityNotFoundException("DetallePedido no encontrado con UUID: " + uuid));
 
-		UUID uuidPedido = detalle.getPedido().getUuid();
 		Pedido pedido = detalle.getPedido();
+		UUID uuidPedido = pedido.getUuid();
 
 		detallePedidoRepo.delete(detalle);
-		pedidoService.recalcularTotal(pedido);
+
+		recalcularTotalPedido(pedido);
 
 		return uuidPedido;
+	}
+
+	public void recalcularTotalPedido(Pedido pedido) {
+
+		List<DetallePedido> detalles = detallePedidoRepo.findByPedido(pedido);
+
+		Float total = detalles.stream()
+				.map(DetallePedido::getSubtotal)
+				.filter(subtotal -> subtotal != null)
+				.reduce(0F, Float::sum);
+
+		pedido.setTotal(total);
+		pedidoRepo.save(pedido);
 	}
 }

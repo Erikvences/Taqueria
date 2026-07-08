@@ -29,6 +29,7 @@ public class DetallePedido {
 	private UUID uuid;
 	@ManyToOne
 	private Pedido pedido;
+	
 	@PrePersist
 	private void inicializarUuid() {
 		this.uuid = UUID.randomUUID();
