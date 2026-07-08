@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Formulario Pedido</title>
+
+	<div th:replace="~{fragmentos :: bootstrap}"></div>
+</head>
+
+<body>
+
+	<div th:replace="~{fragmentos :: menu}"></div>
+
+	<div class="container mt-4">
+
+		<div class="card shadow">
+
+			<div class="card-header bg-dark text-white">
+				<h3 th:text="${pedido.uuid == null} ? 'Nuevo Pedido' : 'Editar Pedido'"></h3>
+			</div>
+
+			<div class="card-body">
+
+				<form th:object="${pedido}"
+					th:action="${pedido.uuid == null} ? @{/rutaPedidos/guardar} : @{/rutaPedidos/actualizar}"
+					method="post">
+
+					<input type="hidden" th:field="*{uuid}" />
+
+					<!-- CLIENTE -->
+
+					<div class="mb-3">
+
+						<label class="form-label">
+							Cliente
+						</label>
+
+						<select class="form-select" th:field="*{cliente.idCliente}" required>
+
+							<option value="">
+								Seleccione un cliente
+							</option>
+
+							<option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}"
+								th:text="${cliente.nombre}">
+							</option>
+
+						</select>
+
+					</div>
+
+
+					<!-- NUEVO PEDIDO -->
+
+					<div class="mb-3" th:if="${pedido.uuid == null}">
+
+						<label class="form-label">
+							Estatus
+						</label>
+
+						<input type="text" class="form-control" value="Pendiente" readonly>
+
+					</div>
+
+
+					<!-- EDITAR PEDIDO -->
+
+					<div class="mb-3" th:if="${pedido.uuid != null}">
+
+						<label class="form-label">
+							Estatus
+						</label>
+
+						<select class="form-select" th:field="*{estatus}">
+
+							<option th:value="${pedido.estatus}" th:text="${pedido.estatus}">
+							</option>
+
+							<option value="Entregado">
+								Entregado
+							</option>
+
+							<option value="Cancelado">
+								Cancelado
+							</option>
+
+						</select>
+
+					</div>
+
+
+					<div class="mt-4">
+
+						<button type="submit" class="btn btn-success">
+
+							Guardar
+
+						</button>
+
+						<a th:href="@{/rutaPedidos/listar}" class="btn btn-secondary">
+
+							Cancelar
+
+						</a>
+
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>
