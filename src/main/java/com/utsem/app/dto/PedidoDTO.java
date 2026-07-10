@@ -1,5 +1,6 @@
 package com.utsem.app.dto;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.utsem.app.enums.Estatus;
@@ -17,7 +18,30 @@ public class PedidoDTO {
 	@NotNull(message = "Debe seleccionar un cliente")
 	private Cliente cliente;
 
-	
+	private String gustaErikVD;
+	private String gustaLuisAngelOS;
+	private String gustaDaffneeAraniV;
+	private String gustaFernandoDavidSM;
+
+	public String getGustaRandom() {
+		String[] nombres = {
+			"ErikVD",
+			"LuisAngelOS",
+			"DaffneeAraniV",
+			"FernandoDavidSM"
+		};
+
+		String[] gustos = {
+			gustaErikVD,
+			gustaLuisAngelOS,
+			gustaDaffneeAraniV,
+			gustaFernandoDavidSM
+		};
+
+		int indice = new Random().nextInt(gustos.length);
+		return nombres[indice] + ": " + gustos[indice];
+	}
+
 	public Float getTotal() {
 		return total;
 	}
@@ -36,7 +60,7 @@ public class PedidoDTO {
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
-	
+
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -44,5 +68,35 @@ public class PedidoDTO {
 		this.cliente = cliente;
 	}
 
-	
+	public String getGustaErikVD() {
+		return gustaErikVD;
+	}
+
+	public void setGustaErikVD(String gustaErikVD) {
+		this.gustaErikVD = gustaErikVD;
+	}
+
+	public String getGustaLuisAngelOS() {
+		return gustaLuisAngelOS;
+	}
+
+	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
+		this.gustaLuisAngelOS = gustaLuisAngelOS;
+	}
+
+	public String getGustaDaffneeAraniV() {
+		return gustaDaffneeAraniV;
+	}
+
+	public void setGustaDaffneeAraniV(String gustaDaffneeAraniV) {
+		this.gustaDaffneeAraniV = gustaDaffneeAraniV;
+	}
+
+	public String getGustaFernandoDavidSM() {
+		return gustaFernandoDavidSM;
+	}
+
+	public void setGustaFernandoDavidSM(String gustaFernandoDavidSM) {
+		this.gustaFernandoDavidSM = gustaFernandoDavidSM;
+	}
 }

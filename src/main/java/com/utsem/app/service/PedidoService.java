@@ -66,11 +66,10 @@ public class PedidoService {
 
 			pedido.setCliente(cliente);
 			pedido.setEstatus(pedidoDTO.getEstatus());
-
-			pedidoRepo.save(pedido);
-
-		} else {
-			throw new EntityNotFoundException("Pedido no encontrado con UUID: " + pedidoDTO.getUuid());
+				pedido.setGustaErikVD(pedidoDTO.getGustaErikVD());
+				pedido.setGustaLuisAngelOS(pedidoDTO.getGustaLuisAngelOS());
+				pedido.setGustaDaffneeAraniV(pedidoDTO.getGustaDaffneeAraniV());
+				pedido.setGustaFernandoDavidSM(pedidoDTO.getGustaFernandoDavidSM());
 		}
 	}
 	public PedidoDTO obtenerPedidoUUID(UUID uuid) {

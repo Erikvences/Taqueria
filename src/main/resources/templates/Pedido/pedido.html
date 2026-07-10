@@ -34,6 +34,7 @@
 					<th>Cliente</th>
 					<th>Total</th>
 					<th>Estatus</th>
+					<th>Reseña</th>
 					<th width="320">Acciones</th>
 
 				</tr>
@@ -51,7 +52,7 @@
 					<td th:text="'$ ' + ${pedido.total}"></td>
 
 					<td th:text="${pedido.estatus}"></td>
-
+					<td th:text="${pedido.getGustaRandom()}"></td>
 					<td>
 
 						<a class="btn btn-success btn-sm"

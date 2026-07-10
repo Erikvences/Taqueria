@@ -31,6 +31,16 @@ public class Pedido {
 	@ManyToOne
 	private Cliente cliente;
 	
+	@Column
+	private String gustaErikVD;
+	@Column
+	private String gustaLuisAngelOS;
+	@Column
+	private String gustaDaffneeAraniV;
+	@Column
+	private String gustaFernandoDavidSM;
+	
+	
 	@PrePersist
 	private void inicializarUuid() {
 		this.uuid = UUID.randomUUID();
@@ -74,6 +84,38 @@ public class Pedido {
 	}
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
+	}
+
+	public String getGustaErikVD() {
+		return gustaErikVD;
+	}
+
+	public void setGustaErikVD(String gustaErikVD) {
+		this.gustaErikVD = gustaErikVD;
+	}
+
+	public String getGustaLuisAngelOS() {
+		return gustaLuisAngelOS;
+	}
+
+	public void setGustaLuisAngelOS(String gustaLuisAngelOS) {
+		this.gustaLuisAngelOS = gustaLuisAngelOS;
+	}
+
+	public String getGustaDaffneeAraniV() {
+		return gustaDaffneeAraniV;
+	}
+
+	public void setGustaDaffneeAraniV(String gustaDaffneeAraniV) {
+		this.gustaDaffneeAraniV = gustaDaffneeAraniV;
+	}
+
+	public String getGustaFernandoDavidSM() {
+		return gustaFernandoDavidSM;
+	}
+
+	public void setGustaFernandoDavidSM(String gustaFernandoDavidSM) {
+		this.gustaFernandoDavidSM = gustaFernandoDavidSM;
 	}
 	
 	
